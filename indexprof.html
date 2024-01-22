@@ -1,0 +1,291 @@
+<!DOCTYPE HTML>
+<!--
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Heim - SMH</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo"><strong>SMH</strong> <span>by Sveinn Margeir</span></a>
+						<nav>
+							<a href="#menu">Heim</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<ul class="links">
+							<li><a href="index.html">Heim</a></li>
+							<li><a href="VEL608G.html">VÉL608G</a></li>
+							<li><a href="resume.html">FERILSKRÁ</a></li>
+							<li><a href="onnurverk.html">ANNAÐ</a></li>
+                            <li><a href="#contact">HAFA SAMBAND</a></li>
+						</ul>
+				    </nav>
+
+
+				<!-- Banner -->
+					<section id="banner" class="major">
+						<div class="inner">
+                            <span class="image">
+										<img src="images/background.jpg" alt="" />
+									</span>
+							<header class="major">
+								<h1>Sveinn Margeir Hauksson</h1>
+							</header>
+							<div class="content">
+								<p>Þetta er heimasíðan mín</p>
+								<ul class="actions">
+									<li><a href="#one" class="button next scrolly">Byrjum þetta!</a></li>
+								</ul>
+							</div>
+						</div>
+					</section>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- One -->
+							<section id="one" class="tiles">
+								<article>
+									<span class="image">
+										<img src="images/pic01.jpg" alt="" />
+									</span>
+									<header class="major">
+										<h3><a href="VEL608G.html" class="link">VÉL608G</a></h3>
+										<p>Tölvustudd framleiðsla</p>
+									</header>
+								</article>
+								<article>
+									<span class="image">
+										<img src="images/pic03.jpg" alt="" />
+									</span>
+									<header class="major">
+										<h3><a href="resume.html" class="link">Ferilskráin mín</a></h3>
+										<p>Smelltu hér til þess að skoða ferilskrána mína</p>
+									</header>
+								</article>
+								<article>
+									<span class="image">
+										<img src="images/pic12.jpg" alt="" />
+									</span>
+									<header class="major">
+										<h3><a href="onnurverk.html" class="link">Önnur verkefni eftir mig</a></h3>
+										<p>Hér getur þú skoðað önnur verkefni sem ég hef komið að</p>
+									</header>
+								</article>
+								<article>
+									<span class="image">
+										<img src="images/pic04.jpg" alt="" />
+									</span>
+									<header class="major">
+										<h3><a href="#contact">Hafðu samband</a></h3>
+										<p>Þú getur haft samband við mig hér fyrir neðan</p>
+									</header>
+                            
+								</article>
+                    
+							</section>
+                        <script src="https://unpkg.com/lume@0.3.0-alpha.26/dist/global.js"></script>
+
+<!-- Do you see the Moon's shadow on Earth's surface when it passes in front of the sun? -->
+
+<!-- Pointer Events polyfill (for Safari < 13) -->
+<script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
+
+<!-- By default a <lume-scene> fills the space of it's parent, in this case the <body>. -->
+<lume-scene id="scene" webgl touch-action="none">
+  <lume-camera-rig initial-polar-angle="0" min-distance="90" max-distance="1000" initial-distance="200"></lume-camera-rig>
+  <!-- Stars -->
+  <lume-sphere
+    id="stars"
+    texture="//assets.codepen.io/191583/galaxy_starfield.png"
+    receive-shadow="false"
+    has="basic-material"
+    sidedness="back"
+    size="4000 4000 4000"
+    mount-point="0.5 0.5 0.5"
+    color="white"
+  ></lume-sphere>
+  <!-- Sun light -->
+  <lume-element3d size="0 0" rotation="0 -50 0">
+    <lume-element3d size="0 0" rotation="10 0 0">
+      <lume-point-light
+        id="light"
+        size="0 0"
+        position="0 0 1800"
+        color="white"
+        intensity="2"
+        distance="10000"
+        shadow-map-width="2048"
+        shadow-map-height="2048"
+        shadow-camera-far="20000"
+      ></lume-point-light>
+    </lume-element3d>
+  </lume-element3d>
+  <!-- Earth -->
+  <lume-element3d size="0 0 0">
+    <lume-element3d rotation="0 180 0">
+      <lume-sphere
+        id="earth"
+        texture="//assets.codepen.io/191583/earthmap1k.jpg"
+        bump-map="//assets.codepen.io/191583/earthbump1k.jpg"
+        specular-map="//assets.codepen.io/191583/earthspec1k.jpg"
+        size="120 120 120"
+        mount-point="0.5 0.5 0.5"
+        color="white"
+      >
+        <lume-sphere
+          id="clouds"
+          texture="//assets.codepen.io/191583/earthclouds.png"
+          opacity="0.7"
+          size="125 125 125"
+          mount-point="0.5 0.5 0.5"
+          align-point="0.5 0.5 0.5"
+          color="white"
+        ></lume-sphere>
+      </lume-sphere>
+    </lume-element3d>
+    <lume-element3d rotation="90 10 0">
+      <lume-element3d id="moonRotator" rotation="0 0 110">
+        <lume-sphere
+          id="moon"
+          texture="//assets.codepen.io/191583/moon.jpg"
+          position="250"
+          size="5 5 5"
+          mount-point="0.5 0.5 0.5"
+          color="white"
+        ></lume-sphere>
+      </lume-element3d>
+    </lume-element3d>
+  </lume-element3d>
+</lume-scene>
+
+<style>
+  html,
+  body {
+    background: #222;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  lume-scene {
+    /* Prevent touch scrolling from interfering with out pointermove handler. */
+    touch-action: auto;
+  }
+
+  lume-scene * {
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  // Define LUME's HTML elements with their default names.
+  LUME.defineElements();
+
+  moonRotator.rotation = (x, y, z, t) => [x, y, t * 0.004];
+  earth.rotation = (x, y, z, t) => [x, t * 0.01, z];
+  clouds.rotation = (x, y, z, t) => [x, -t * 0.003, z];
+</script>
+
+					</div>
+
+
+				<!-- Contact -->
+					<section id="contact">
+						<div class="inner">
+							<section>
+								<form method="post" action="mailto:smh40@hi.is">
+									<div class="fields">
+										<div class="field half">
+											<label for="name">Nafn</label>
+											<input type="text" name="name" id="name" />
+										</div>
+										<div class="field half">
+											<label for="email">Netfang</label>
+											<input type="text" name="email" id="email" />
+										</div>
+										<div class="field">
+											<label for="message">Skilaboð</label>
+											<textarea name="message" id="message" rows="6"></textarea>
+										</div>
+									</div>
+									<ul class="actions">
+                                        <!-- Use a button instead of input for better styling options -->
+                                        <li><button type="submit" class="primary">Senda skilaboð</button></li>
+                                        <li><input type="reset" value="Hreinsa" /></li>
+                                    </ul>
+								</form>
+							</section>
+							<section class="split">
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-envelope"></span>
+										<h3>Netfangið mitt</h3>
+										<a href="#">smh40@hi.is</a>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-phone"></span>
+										<h3>Símanúmer</h3>
+										<span>+354 897-1637</span>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-home"></span>
+										<h3>Heimilisfang</h3>
+										<span>Holtagerði 8<br />
+										Húsavík, 640<br />
+										Ísland</span>
+									</div>
+								</section>
+							</section>
+						</div>
+					</section>
+
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<ul class="icons">
+								<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+								<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+								<li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
+								<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+								<li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+							</ul>
+							<ul class="copyright">
+								<li>&copy; Sveinn Margeir</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
