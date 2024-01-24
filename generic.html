@@ -1,141 +1,219 @@
 <!DOCTYPE HTML>
 <!--
-	Forty by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+    Forty by HTML5 UP
+    html5up.net | @ajlkn
+    Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
-<html>
-	<head>
-		<title>Generic - Forty by HTML5 UP</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-preload">
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
 
-		<!-- Wrapper -->
-			<div id="wrapper">
+        body {
+            background: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
 
-				<!-- Header -->
-					<header id="header">
-						<a href="index.html" class="logo"><strong>Forty</strong> <span>by HTML5 UP</span></a>
-						<nav>
-							<a href="#menu">Menu</a>
-						</nav>
-					</header>
+        canvas {
+            border: 1px solid white;
+        }
 
-				<!-- Menu -->
-					<nav id="menu">
-						<ul class="links">
-							<li><a href="index.html">Home</a></li>
-							<li><a href="landing.html">Landing</a></li>
-							<li><a href="generic.html">Generic</a></li>
-							<li><a href="elements.html">Elements</a></li>
-						</ul>
-						<ul class="actions stacked">
-							<li><a href="#" class="button primary fit">Get Started</a></li>
-							<li><a href="#" class="button fit">Log In</a></li>
-						</ul>
-					</nav>
+        #wrapper {
+            width: 100%;
+            text-align: center;
+            margin-top: 2em;
+        }
 
-				<!-- Main -->
-					<div id="main" class="alt">
+        /* Adjust footer styles */
+        #footer {
+            margin-top: 2em;
+        }
+    </style>
+</head>
+<body class="is-preload">
 
-						<!-- One -->
-							<section id="one">
-								<div class="inner">
-									<header class="major">
-										<h1>Generic</h1>
-									</header>
-									<span class="image main"><img src="images/pic11.jpg" alt="" /></span>
-									<p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fergiat. Pellentesque in mi eu massa lacinia malesuada et a elit. Donec urna ex, lacinia in purus ac, pretium pulvinar mauris. Curabitur sapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit.</p>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor fermentum. Nullam venenatis erat id vehicula viverra. Nunc ultrices eros ut ultricies condimentum. Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In non lorem sit amet elit placerat maximus. Pellentesque aliquam maximus risus, vel sed vehicula.</p>
-									<p>Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fersapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit tristique lorem ipsum dolor.</p>
-								</div>
-							</section>
+    <div id="wrapper">
 
-					</div>
+        <!-- Header -->
+        <header id="header">
+            <a href="index.html" class="logo"><strong>SMH</strong> <span>by Sveinn Margeir</span></a>
+        </header>
 
-				<!-- Contact -->
-					<section id="contact">
-						<div class="inner">
-							<section>
-								<form method="post" action="#">
-									<div class="fields">
-										<div class="field half">
-											<label for="name">Name</label>
-											<input type="text" name="name" id="name" />
-										</div>
-										<div class="field half">
-											<label for="email">Email</label>
-											<input type="text" name="email" id="email" />
-										</div>
-										<div class="field">
-											<label for="message">Message</label>
-											<textarea name="message" id="message" rows="6"></textarea>
-										</div>
-									</div>
-									<ul class="actions">
-										<li><input type="submit" value="Send Message" class="primary" /></li>
-										<li><input type="reset" value="Clear" /></li>
-									</ul>
-								</form>
-							</section>
-							<section class="split">
-								<section>
-									<div class="contact-method">
-										<span class="icon solid alt fa-envelope"></span>
-										<h3>Email</h3>
-										<a href="#">information@untitled.tld</a>
-									</div>
-								</section>
-								<section>
-									<div class="contact-method">
-										<span class="icon solid alt fa-phone"></span>
-										<h3>Phone</h3>
-										<span>(000) 000-0000 x12387</span>
-									</div>
-								</section>
-								<section>
-									<div class="contact-method">
-										<span class="icon solid alt fa-home"></span>
-										<h3>Address</h3>
-										<span>1234 Somewhere Road #5432<br />
-										Nashville, TN 00000<br />
-										United States of America</span>
-									</div>
-								</section>
-							</section>
-						</div>
-					</section>
+        
+        <!-- Snake Game -->
+        <section>
+            <canvas width="500" height="500" id="game"></canvas>
+            <script>
+                var canvas = document.getElementById('game');
+                var context = canvas.getContext('2d');
 
-				<!-- Footer -->
-					<footer id="footer">
-						<div class="inner">
-							<ul class="icons">
-								<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
-								<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
-								<li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
-								<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
-								<li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
-							</ul>
-							<ul class="copyright">
-								<li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
-							</ul>
-						</div>
-					</footer>
+                var grid = 16;
+                var count = 0;
 
-			</div>
+                var snake = {
+                    x: 160,
+                    y: 160,
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
+                    // snake velocity. moves one grid length every frame in either the x or y direction
+                    dx: grid,
+                    dy: 0,
 
-	</body>
+                    // keep track of all grids the snake body occupies
+                    cells: [],
+
+                    // length of the snake. grows when eating an apple
+                    maxCells: 4
+                };
+                var apple = {
+                    x: 320,
+                    y: 320
+                };
+
+                // get random whole numbers in a specific range
+                // @see https://stackoverflow.com/a/1527820/2124254
+                function getRandomInt(min, max) {
+                    return Math.floor(Math.random() * (max - min)) + min;
+                }
+
+                // game loop
+                function loop() {
+                    requestAnimationFrame(loop);
+
+                    // slow game loop to 15 fps instead of 60 (60/15 = 4)
+                    if (++count < 4) {
+                        return;
+                    }
+
+                    count = 0;
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+
+                    // move snake by its velocity
+                    snake.x += snake.dx;
+                    snake.y += snake.dy;
+
+                    // wrap snake position horizontally on the edge of the screen
+                    if (snake.x < 0) {
+                        snake.x = canvas.width - grid;
+                    } else if (snake.x >= canvas.width) {
+                        snake.x = 0;
+                    }
+
+                    // wrap snake position vertically on the edge of the screen
+                    if (snake.y < 0) {
+                        snake.y = canvas.height - grid;
+                    } else if (snake.y >= canvas.height) {
+                        snake.y = 0;
+                    }
+
+                    // keep track of where snake has been. the front of the array is always the head
+                    snake.cells.unshift({ x: snake.x, y: snake.y });
+
+                    // remove cells as we move away from them
+                    if (snake.cells.length > snake.maxCells) {
+                        snake.cells.pop();
+                    }
+
+                    // draw apple
+                    context.fillStyle = 'red';
+                    context.fillRect(apple.x, apple.y, grid - 1, grid - 1);
+
+                    // draw snake one cell at a time
+                    context.fillStyle = 'green';
+                    snake.cells.forEach(function (cell, index) {
+
+                        // drawing 1 px smaller than the grid creates a grid effect in the snake body so you can see how long it is
+                        context.fillRect(cell.x, cell.y, grid - 1, grid - 1);
+
+                        // snake ate apple
+                        if (cell.x === apple.x && cell.y === apple.y) {
+                            snake.maxCells++;
+
+                            // canvas is 400x400 which is 25x25 grids 
+                            apple.x = getRandomInt(0, 25) * grid;
+                            apple.y = getRandomInt(0, 25) * grid;
+                        }
+
+                        // check collision with all cells after this one (modified bubble sort)
+                        for (var i = index + 1; i < snake.cells.length; i++) {
+
+                            // snake occupies the same space as a body part. reset the game
+                            if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
+                                snake.x = 160;
+                                snake.y = 160;
+                                snake.cells = [];
+                                snake.maxCells = 4;
+                                snake.dx = grid;
+                                snake.dy = 0;
+
+                                apple.x = getRandomInt(0, 25) * grid;
+                                apple.y = getRandomInt(0, 25) * grid;
+                            }
+                        }
+                    });
+                }
+
+                // listen to keyboard events to move the snake
+                document.addEventListener('keydown', function (e) {
+                    // prevent the snake from backtracking on itself by checking that it's 
+                    // not already moving on the same axis (pressing left while moving
+                    // left won't do anything, and pressing right while moving left
+                    // shouldn't let you collide with your own body)
+
+                    // left arrow key
+                    if (e.which === 37 && snake.dx === 0) {
+                        snake.dx = -grid;
+                        snake.dy = 0;
+                    }
+                    // up arrow key
+                    else if (e.which === 38 && snake.dy === 0) {
+                        snake.dy = -grid;
+                        snake.dx = 0;
+                    }
+                    // right arrow key
+                    else if (e.which === 39 && snake.dx === 0) {
+                        snake.dx = grid;
+                        snake.dy = 0;
+                    }
+                    // down arrow key
+                    else if (e.which === 40 && snake.dy === 0) {
+                        snake.dy = grid;
+                        snake.dx = 0;
+                    }
+                });
+
+                // start the game
+                requestAnimationFrame(loop);
+            </script>
+        </section>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <div class="inner">
+                <ul class="icons">
+                    <li><a href="https://twitter.com/sveinnhauksson?lang=en" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+                    <li><a href="https://www.facebook.com/sveinnmargeir.hauksson/" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+                    <li><a href="https://www.instagram.com/sveinnmargeir/" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
+                    <li><a href="https://github.com/sveinnmargeir" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+                    <li><a href="https://www.linkedin.com/in/sveinn-margeir-hauksson-8386a4229/?originalSubdomain=is" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+                </ul>
+                <ul class="copyright">
+                    <li>&copy; Sveinn Margeir</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
+                </ul>
+            </div>
+        </footer>
+    </div>
+
+</body>
 </html>
