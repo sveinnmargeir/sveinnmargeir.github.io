@@ -1,191 +1,101 @@
-<!DOCTYPE HTML>
-<!--
-	Forty by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-	<head>
-		<title>Heim - SMH</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-preload">
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sveinn Margeir Hauksson • Quant Projects</title>
+  <meta name="description" content="Greiningar, pælingar, gleði." />
+  <link rel="icon" href="assets/img/favicon.png" />
+  <link rel="preconnect" href="https://cdn.plot.ly">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    :root { --bg:#0b0d12; --card:#121620; --muted:#c8d0e0; --accent:#58a6ff; --txt:#e6ecf5; }
+    *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;background:var(--bg);color:var(--txt);}
+    a{color:var(--accent);text-decoration:none}
+    .container{max-width:1100px;margin:0 auto;padding:20px}
+    header{position:sticky;top:0;background:rgba(11,13,18,.9);backdrop-filter:blur(8px);border-bottom:1px solid #1c2230}
+    nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{font-weight:700;letter-spacing:.4px}
+    .navlinks a{margin-left:14px}
+    .hero{padding:64px 0;display:grid;gap:20px}
+    .hero h1{font-size:clamp(28px,5vw,44px);margin:0}
+    .hero p{color:var(--muted);max-width:750px}
+    .btn{display:inline-block;padding:10px 16px;border:1px solid #33415a;border-radius:10px}
+    .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+    .card{background:var(--card);border:1px solid #1c2230;border-radius:14px;padding:16px}
+    .card h3{margin:.2rem 0 .4rem}
+    .footer{border-top:1px solid #1c2230;color:#9fb0c7;padding:24px 0;margin-top:40px}
+    #chart{height:420px;background:var(--card);border:1px solid #1c2230;border-radius:14px;padding:8px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="brand">Sveinn Margeir Hauksson</div>
+        <!-- NAV -->
+		<div class="navlinks">
+			<a href="/verkefni/">Verkefni</a>   <!-- full list page -->
+			<a href="#verkefni">Yfirlit</a>    <!-- jump to the short list on the home page -->
+			<a href="/Ferilskra.html">Ferilskrá</a>
+		</div>
+      </nav>
+    </div>
+  </header>
 
-		<div id="wrapper">
+  <main class="container">
+    <section class="hero">
+      <h1>Greiningar og skýrslur</h1>
+      <p>MFE @ UCLA. Gagnagreiningar, fjármál, pælingar og skemmtilegheit.</p>
+      <div>
+        <a class="btn" href="#verkefni">Skoða verkefni</a>
+		<a class="btn" href="mailto:sveinn.hauksson.2025@anderson.ucla.edu">Hafa samband</a>
+      </div>
+    </section>
 
-				<!-- Header -->
-					<header id="header">
-						<a href="index.html" class="logo"><strong>SMH</strong> <span>by Sveinn Margeir</span></a>
-						<nav>
-							<a href="#menu">Heim</a>
-						</nav>
-					</header>
+    <section id="Verkefni">
+      <h2>Verkefni</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Sharpe Hlutföll</h3>
+          <p>Hversu góðri ávöxtun eru íslensk hlutabréf að skila miðað við áhættu?</p>
+          <a href="projects/sharpe.html">Skoða →</a>
+        </article>
+        <article class="card">
+          <h3>X</h3>
+          <p>X.</p>
+          <a href="projects/sharpe-heatmap.html">Details →</a>
+        </article>
+        <article class="card">
+          <h3>X</h3>
+          <p>X</p>
+          <a href="projects/crack-spreads.html">Details →</a>
+        </article>
+      </div>
 
-				<!-- Menu -->
-					<nav id="menu">
-						<ul class="links">
-							<li><a href="index.html">Heim</a></li>
-							<li><a href="VEL608G.html">VÉL608G</a></li>
-							<li><a href="resume.html">FERILSKRÁ</a></li>
-							<li><a href="onnurverk.html">ANNAÐ</a></li>
-                            <li><a href="generic.html">SPILA SNAKE</a></li>
-                            <li><a href="#contact">HAFA SAMBAND</a></li>
-						</ul>
-				    </nav>
+	  <p style="margin-top:14px">
+		<!-- user site: /verkefni/  |  project site: ./verkefni/ -->
+		<a class="btn" href="./verkefni/">Sjá öll verkefni →</a>
+	  </p>
+    </section>
 
+    <section id="grof">
+      <h2>Hversu margir hafa heimsótt þessa heimasíðu á síðustu 14 dögum?</h2>
+      <div id="chart"></div>
+    </section>
+  </main>
 
-				<!-- Banner -->
-					<section id="banner" class="major">
-						<div class="inner">
-                            <span class="image">
-										<img src="images/background.jpg" alt="" />
-									</span>
-							<header class="major">
-								<h1>Sveinn Margeir Hauksson</h1>
-							</header>
-							<div class="content">
-								<p>Þetta er heimasíðan mín</p>
-								<ul class="actions">
-									<li><a href="#one" class="button next scrolly">Byrjum þetta!</a></li>
-								</ul>
-							</div>
-						</div>
-					</section>
+  <footer class="container footer">
+    © <span id="y"></span> Sveinn Margeir Hauksson · GitHub Pages
+  </footer>
 
-				<!-- Main -->
-					<div id="main">
-
-						<!-- One -->
-							<section id="one" class="tiles">
-								<article>
-									<span class="image">
-										<img src="images/pic01.jpg" alt="" />
-									</span>
-									<header class="major">
-										<h3><a href="VEL608G.html" class="link">VÉL608G</a></h3>
-										<p>Tölvustudd framleiðsla</p>
-									</header>
-								</article>
-								<article>
-									<span class="image">
-										<img src="images/pic03.jpg" alt="" />
-									</span>
-									<header class="major">
-										<h3><a href="resume.html" class="link">Ferilskráin mín</a></h3>
-										<p>Smelltu hér til þess að skoða ferilskrána mína</p>
-									</header>
-								</article>
-								<article>
-									<span class="image">
-										<img src="images/pic12.jpg" alt="" />
-									</span>
-									<header class="major">
-										<h3><a href="onnurverk.html" class="link">Önnur verkefni eftir mig</a></h3>
-										<p>Hér getur þú skoðað önnur verkefni sem ég hef komið að</p>
-									</header>
-								</article>
-								<article>
-									<span class="image">
-										<img src="images/pic04.jpg" alt="" />
-									</span>
-									<header class="major">
-										<h3><a href="#contact">Hafðu samband</a></h3>
-										<p>Þú getur haft samband við mig hér fyrir neðan</p>
-									</header>
-                            
-								</article>
-                    
-							</section>
-            
-					</div>
-            <section>
-            </section>
-
-
-				<!-- Contact -->
-					<section id="contact">
-						<div class="inner">
-							<section>
-								<form method="post" action="mailto:smh40@hi.is">
-									<div class="fields">
-										<div class="field half">
-											<label for="name">Nafn</label>
-											<input type="text" name="name" id="name" />
-										</div>
-										<div class="field half">
-											<label for="email">Netfang</label>
-											<input type="text" name="email" id="email" />
-										</div>
-										<div class="field">
-											<label for="message">Skilaboð</label>
-											<textarea name="message" id="message" rows="6"></textarea>
-										</div>
-									</div>
-									<ul class="actions">
-                                        <!-- Use a button instead of input for better styling options -->
-                                        <li><button type="submit" class="primary">Senda skilaboð</button></li>
-                                        <li><input type="reset" value="Hreinsa" /></li>
-                                    </ul>
-								</form>
-							</section>
-							<section class="split">
-								<section>
-									<div class="contact-method">
-										<span class="icon solid alt fa-envelope"></span>
-										<h3>Netfangið mitt</h3>
-										<a href="#">smh40@hi.is</a>
-									</div>
-								</section>
-								<section>
-									<div class="contact-method">
-										<span class="icon solid alt fa-phone"></span>
-										<h3>Símanúmer</h3>
-										<span>+354 897-1637</span>
-									</div>
-								</section>
-								<section>
-									<div class="contact-method">
-										<span class="icon solid alt fa-home"></span>
-										<h3>Heimilisfang</h3>
-										<span>Holtagerði 8<br />
-										Húsavík, 640<br />
-										Ísland</span>
-									</div>
-								</section>
-							</section>
-						</div>
-					</section>
-
-
-				<!-- Footer -->
-					<footer id="footer">
-						<div class="inner">
-							<ul class="icons">
-								<li><a href="https://twitter.com/sveinnhauksson?lang=en" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
-								<li><a href="https://www.facebook.com/sveinnmargeir.hauksson/" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
-								<li><a href="https://www.instagram.com/sveinnmargeir/" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
-								<li><a href="https://github.com/sveinnmargeir" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
-								<li><a href="https://www.linkedin.com/in/sveinn-margeir-hauksson-8386a4229/?originalSubdomain=is" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
-							</ul>
-							<ul class="copyright">
-								<li>&copy; Sveinn Margeir</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
-							</ul>
-						</div>
-					</footer>
-
-			</div>
-
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-
-	</body>
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+    const data = [{x:[1,2,3,4,5], y:[1,1.5,1.2,1.9,2.5], type:'scatter', mode:'lines+markers', name:'Demo'}];
+    const layout = {margin:{t:40,r:20,b:40,l:40}, title:'Plotly placeholder'};
+    Plotly.newPlot('chart', data, layout, {displayModeBar:false, responsive:true});
+  </script>
+</body>
 </html>
+
+
