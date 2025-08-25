@@ -2,3 +2,7 @@
 
 # keep raw data local
 data/
+
+# ignore raw market/rf data only
+/data/market_data/
+/data/market_data/**
