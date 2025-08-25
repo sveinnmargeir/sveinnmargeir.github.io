@@ -27,6 +27,15 @@
     .footer{border-top:1px solid #1c2230;color:#9fb0c7;padding:24px 0;margin-top:40px}
     #chart{height:420px;background:var(--card);border:1px solid #1c2230;border-radius:14px;padding:8px}
   </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GFF8BG47YN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-GFF8BG47YN');
+  </script>
 </head>
 <body>
   <header>
@@ -83,18 +92,37 @@
       <h2>Hversu margir hafa heimsótt þessa heimasíðu á síðustu 14 dögum?</h2>
       <div id="chart"></div>
     </section>
+    
+
+    <div id="visits-chart" style="max-width:900px;margin:auto;"></div>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+    async function loadVisits() {
+      const resp = await fetch("https://script.google.com/macros/s/AKfycbyYeli4-BNxy3mRr756Zh2qyIcUjnX5Dk0klS2TRe4gfkxJ-N2Qlav7RXAZwb3Yv3drDw/exec");
+      const { dates, visits } = await resp.json();
+      Plotly.newPlot("visits-chart", [{
+        x: dates,
+        y: visits,
+        type: "scatter",
+        mode: "lines+markers"
+      }], {
+        title: "Visits (Last 14 Days)",
+        xaxis: { type: "date" },
+        yaxis: { rangemode: "tozero" },
+        margin: { t: 30 }
+      });
+    }
+    loadVisits();
+    // optional: refresh hourly
+    // setInterval(loadVisits, 60*60*1000);
+    </script>
+
   </main>
 
   <footer class="container footer">
     © <span id="y"></span> Sveinn Margeir Hauksson · GitHub Pages
   </footer>
 
-  <script>
-    document.getElementById("y").textContent = new Date().getFullYear();
-    const data = [{x:[1,2,3,4,5], y:[1,1.5,1.2,1.9,2.5], type:'scatter', mode:'lines+markers', name:'Demo'}];
-    const layout = {margin:{t:40,r:20,b:40,l:40}, title:'Plotly placeholder'};
-    Plotly.newPlot('chart', data, layout, {displayModeBar:false, responsive:true});
-  </script>
 </body>
 </html>
 
