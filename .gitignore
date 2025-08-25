@@ -1,1 +1,4 @@
 .DS_Store
+
+# keep raw data local
+data/
