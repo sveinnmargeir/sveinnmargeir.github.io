@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Market Dashboards • Sveinn Margeir Hauksson</title>
+  <meta name="description" content="Interactive market dashboards: Sharpe, VaR, Expected Shortfall, risk rankings, and more." />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#0b0d12" />
+  <link rel="icon" href="assets/img/favicon.png" />
+  <link rel="preconnect" href="https://cdn.plot.ly">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    :root { --bg:#0b0d12; --card:#121620; --muted:#c8d0e0; --accent:#58a6ff; --txt:#e6ecf5; --ring:#1f2633; --good:#2ecc71; --warn:#ffb020; --bad:#ff5d5d; --shadow: 0 10px 30px rgba(0,0,0,.35);} 
+    :root.light { --bg:#f6f8fb; --card:#ffffff; --muted:#5b6470; --accent:#145cff; --txt:#0c1020; --ring:#e8edf5; --good:#1ea35a; --warn:#b07b00; --bad:#d23b3b; --shadow: 0 10px 25px rgba(10,40,120,.10);} 
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--txt)}
+    a{color:var(--accent);text-decoration:none}
+
+    header{position:sticky;top:0;backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--ring);z-index:40}
+    header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 28px;background:color-mix(in oklab, var(--bg) 85%, transparent)}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#6ee7ff);box-shadow:var(--shadow)}
+    nav{display:flex;gap:16px;align-items:center}
+    button.tgl{appearance:none;border:1px solid var(--ring);background:var(--card);color:var(--txt);padding:8px 12px;border-radius:12px;cursor:pointer}
+
+    .container{max-width:1280px;margin-inline:auto;padding:22px}
+
+    .layout{display:grid;grid-template-columns:1fr;gap:18px}
+    @media(min-width:1100px){.layout{grid-template-columns:280px 1fr}}
+
+    .side{background:var(--card);border:1px solid var(--ring);border-radius:18px;padding:16px;box-shadow:var(--shadow);height:max-content;position:sticky;top:78px}
+    .side h3{margin:0 0 10px}
+    .f{display:grid;gap:10px}
+    .f label{font-size:12px;color:var(--muted)}
+    .f input,.f select{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--ring);background:var(--card);color:var(--txt)}
+    .chips{display:flex;flex-wrap:wrap;gap:8px}
+    .chip{font-size:12px;border:1px solid var(--ring);padding:6px 10px;border-radius:999px;cursor:pointer;color:var(--muted)}
+    .chip.active{outline:2px solid color-mix(in oklab, var(--accent) 55%, transparent);color:var(--txt)}
+
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+    .card{grid-column:span 12;background:var(--card);border:1px solid var(--ring);border-radius:18px;padding:16px;box-shadow:var(--shadow)}
+    .card h3{margin:4px 0 6px;font-size:18px}
+    .sub{color:var(--muted);font-size:14px;margin:0 0 8px}
+    @media(min-width:760px){.half{grid-column:span 6}.third{grid-column:span 4}.two{grid-column:span 8}.four{grid-column:span 4}}
+
+    .kpi{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    @media(min-width:760px){.kpi{grid-template-columns:repeat(4,1fr)}}
+    .tile{border:1px solid var(--ring);border-radius:14px;padding:12px}
+    .tile .label{font-size:12px;color:var(--muted)}
+    .tile .value{font-size:22px;margin-top:4px}
+
+    .tbl{overflow:auto;border:1px solid var(--ring);border-radius:14px}
+    table{width:100%;border-collapse:separate;border-spacing:0}
+    th,td{padding:10px 12px;border-bottom:1px solid var(--ring);font-size:14px}
+    th{text-align:left;color:var(--muted);position:sticky;top:0;background:var(--card)}
+    tr:hover td{background:color-mix(in oklab, var(--card) 88%, transparent)}
+
+    footer{margin:36px 0 60px;color:var(--muted)}
+    .foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;border-top:1px solid var(--ring);padding-top:18px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <strong>Market Dashboards</strong>
+      </div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="#">Docs</a>
+        <button class="tgl" id="modeToggle" title="Toggle Light/Dark">Toggle theme</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="layout">
+      <!-- SIDEBAR FILTERS -->
+      <aside class="side">
+        <h3>Filters</h3>
+        <div class="f">
+          <div>
+            <label for="metric">Metric</label>
+            <select id="metric">
+              <option>Sharpe</option>
+              <option>VaR</option>
+              <option>Expected Shortfall</option>
+              <option>Volatility</option>
+              <option>Return</option>
+            </select>
+          </div>
+          <div>
+            <label for="window">Window</label>
+            <select id="window">
+              <option value="252">1Y (252d)</option>
+              <option value="756">3Y (756d)</option>
+              <option value="1260">5Y (1260d)</option>
+            </select>
+          </div>
+          <div>
+            <label for="frequency">Sampling</label>
+            <select id="frequency">
+              <option>Daily</option>
+              <option>Weekly</option>
+              <option>Monthly</option>
+            </select>
+          </div>
+          <div>
+            <label for="rf">Risk-free (annual)</label>
+            <input id="rf" type="number" step="0.01" value="0.05" />
+          </div>
+          <div>
+            <label>Universe</label>
+            <div class="chips" id="chips-universe"></div>
+          </div>
+          <div>
+            <label for="search">Search ticker/company</label>
+            <input id="search" placeholder="e.g., ICEAIR, ALVO, KVIKA" />
+          </div>
+          <button class="tgl" id="apply">Apply</button>
+        </div>
+      </aside>
+
+      <!-- MAIN GRID -->
+      <section class="grid">
+        <article class="card">
+          <h3>Overview</h3>
+          <p class="sub">Key risk/return tiles update with your filters.</p>
+          <div class="kpi" id="kpis"></div>
+        </article>
+
+        <article class="card two">
+          <h3 id="ts-title">Time Series</h3>
+          <p class="sub">Selected metric across time for chosen ticker.</p>
+          <div id="chart-ts" style="height:340px"></div>
+        </article>
+        <article class="card four">
+          <h3>Leaders & Laggards</h3>
+          <p class="sub">Top and bottom by selected metric.</p>
+          <div id="chart-bars" style="height:340px"></div>
+        </article>
+
+        <article class="card half">
+          <h3>Heatmap</h3>
+          <p class="sub">Metric by ticker and window.</p>
+          <div id="chart-heat" style="height:320px"></div>
+        </article>
+        <article class="card half">
+          <h3>Distribution</h3>
+          <p class="sub">Cross-sectional distribution of the metric.</p>
+          <div id="chart-hist" style="height:320px"></div>
+        </article>
+
+        <article class="card">
+          <h3>Risk Table</h3>
+          <p class="sub">Sortable table of assets with Sharpe, VaR, ES, Vol, Returns.</p>
+          <div class="tbl"><table id="tbl"></table></div>
+        </article>
+
+        <footer class="card">
+          <div class="foot">
+            <div>Data source: <span id="dataSrc">—</span></div>
+            <div>© <span id="yr"></span> Sveinn Margeir Hauksson</div>
+          </div>
+        </footer>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    // --- Theme toggle ---
+    const root = document.documentElement;
+    const saved = localStorage.getItem('theme');
+    if(saved === 'light'){ root.classList.add('light'); }
+    document.getElementById('modeToggle').addEventListener('click',()=>{
+      root.classList.toggle('light');
+      localStorage.setItem('theme', root.classList.contains('light') ? 'light' : 'dark');
+    });
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // --- CONFIG: point to your generated CSVs ---
+    const CONFIG = {
+      DATA_FILES: {
+        "All": {
+          "Sharpe": "data/metrics/sharpe.csv",
+          "VaR": "data/metrics/var.csv",
+          "Expected Shortfall": "data/metrics/es.csv",
+          "Volatility": "data/metrics/vol.csv",
+          "Return": "data/metrics/ret.csv"
+        }
+      },
+      UNIVERSES: ["All"],                           // single universe for Iceland
+      FULL_SERIES_URL: "data/metrics/metrics_full.csv"
+    };
+
+    // build chips
+    const chipWrap = document.getElementById('chips-universe');
+    CONFIG.UNIVERSES.forEach((u,i)=>{
+      const b=document.createElement('button');
+      b.className='chip'+(i===0?' active':'');
+      b.dataset.val=u; b.textContent=u; chipWrap.appendChild(b);
+    });
+    chipWrap.addEventListener('click',(e)=>{
+      if(!e.target.classList.contains('chip')) return;
+      [...chipWrap.children].forEach(c=>c.classList.remove('active'));
+      e.target.classList.add('active');
+      applyControls();
+    });
+
+    // --- CSV helpers ---
+    function csvToRows(txt){
+      const [head,...lines] = txt.trim().split(/\r?\n/);
+      const cols=head.split(',').map(s=>s.trim());
+      return lines.filter(Boolean).map(l=>{
+        const vals=l.split(',');
+        const o={};
+        cols.forEach((c,i)=> o[c]=isNaN(+vals[i])?vals[i]:+vals[i]);
+        return o;
+      });
+    }
+
+    // --- Data loaders & cache ---
+    const dataCache = new Map();
+    const fullCache = new Map();
+
+    function dataURLFor(){
+      const u = state.universe;
+      const m = state.metric;
+      const map = CONFIG.DATA_FILES[u] || CONFIG.DATA_FILES['All'] || {};
+      return map[m] || map['Sharpe'];
+    }
+
+    async function loadLatest(){
+      const url = dataURLFor();
+      document.getElementById('dataSrc').textContent = url;
+      if(dataCache.has(url)) return dataCache.get(url);
+      const txt = await (await fetch(url)).text();
+      const rows = csvToRows(txt);
+      dataCache.set(url, rows);
+      return rows;
+    }
+
+    async function loadFullSeries(){
+      const url = CONFIG.FULL_SERIES_URL;
+      if(fullCache.has(url)) return fullCache.get(url);
+      const txt = await (await fetch(url)).text();
+      const rows = csvToRows(txt); // schema: date,ticker,name,sector,ret,vol,sharpe,var,es
+      fullCache.set(url, rows);
+      return rows;
+    }
+
+    // --- State & helpers ---
+    const state = { metric:'Sharpe', window:252, frequency:'Daily', rf:0.05, universe:'All', search:'', rows:[] };
+    function q(sel){ return document.querySelector(sel); }
+    function fmt(x, d=2){ return (x==null || !isFinite(x)) ? '—' : (Math.abs(x)>=1000? x.toLocaleString(): (+x).toFixed(d)); }
+
+    function applyControls(){
+      state.metric = q('#metric').value;
+      state.window = +q('#window').value;
+      state.frequency = q('#frequency').value;
+      state.rf = parseFloat(q('#rf').value || '0');
+      state.search = q('#search').value.trim().toUpperCase();
+      state.universe = chipWrap.querySelector('.active')?.dataset.val || 'All';
+      render();
+    }
+    document.getElementById('apply').addEventListener('click', applyControls);
+    document.getElementById('metric').addEventListener('change', applyControls);
+
+    function sliceLatest(rows){
+      // assume one latest row per ticker in these CSVs
+      const seen = new Set(), out=[];
+      for(const r of rows){
+        if(seen.has(r.ticker)) continue;
+        seen.add(r.ticker); out.push(r);
+      }
+      return out;
+    }
+
+    function filterUniverse(rows){
+      // only apply search since we have 1 universe
+      return rows.filter(r=>{
+        const passS = !state.search || (r.ticker||'').toUpperCase().includes(state.search) || (r.name||'').toUpperCase().includes(state.search);
+        return passS;
+      });
+    }
+
+    function rankByMetric(rows, key){
+      const arr = rows.slice().sort((a,b)=> (+(b[key]??-Infinity)) - (+(a[key]??-Infinity)));
+      const top = arr.slice(0,5), bottom = arr.slice(-5).reverse();
+      return {top, bottom, full:arr};
+    }
+
+    function keyForMetric(){
+      return ({'Sharpe':'sharpe','VaR':'var','Expected Shortfall':'es','Volatility':'vol','Return':'ret'})[state.metric];
+    }
+
+    // --- Renderers ---
+    function renderKPIs(latest){
+      const k = keyForMetric();
+      const m = rankByMetric(latest, k);
+      const best = m.top[0];
+      const worst = m.bottom[0];
+      const avg = latest.length ? latest.reduce((s,r)=> s + (+r[k]||0), 0) / latest.length : 0;
+      q('#kpis').innerHTML = `
+        <div class="tile"><div class="label">Universe</div><div class="value">${state.universe}</div></div>
+        <div class="tile"><div class="label">Metric</div><div class="value">${state.metric}</div></div>
+        <div class="tile"><div class="label">Best</div><div class="value">${best?.ticker||'—'} (${fmt(best?.[k])})</div></div>
+        <div class="tile"><div class="label">Worst</div><div class="value">${worst?.ticker||'—'} (${fmt(worst?.[k])})</div></div>`;
+    }
+
+    function renderBars(latest){
+      const k = keyForMetric();
+      const r = rankByMetric(latest, k);
+      const labels = r.top.map(x=>x.ticker).concat(r.bottom.map(x=>x.ticker));
+      const vals = r.top.map(x=>+x[k]).concat(r.bottom.map(x=>+x[k]));
+      Plotly.newPlot('chart-bars', [{
+        x: labels, y: vals, type:'bar'
+      }], {margin:{l:40,r:10,t:10,b:40}, paper_bgcolor:'transparent', plot_bgcolor:'transparent',
+           xaxis:{gridcolor:'rgba(255,255,255,.06)'}, yaxis:{gridcolor:'rgba(255,255,255,.06)'}} , {displayModeBar:false});
+    }
+
+    function renderHeat(latest){
+      // placeholder windows based on a simple scale of current metric
+      const k = keyForMetric();
+      const keys = ['1Y','3Y','5Y'];
+      const tickers = latest.map(r=>r.ticker);
+      const z = keys.map((_,i)=> latest.map(r=> (+r[k]||0) * (1 + (i-1)*0.15)));
+      Plotly.newPlot('chart-heat', [{
+        z, x: tickers, y: keys, type:'heatmap', showscale:true
+      }], {margin:{l:60,r:10,t:10,b:40}, paper_bgcolor:'transparent', plot_bgcolor:'transparent'}, {displayModeBar:false});
+    }
+
+    function renderHist(latest){
+      const k = keyForMetric();
+      const vals = latest.map(r=> +r[k] ).filter(v=> Number.isFinite(v));
+      Plotly.newPlot('chart-hist', [{
+        x: vals, type:'histogram', nbinsx: 20
+      }], {margin:{l:40,r:10,t:10,b:40}, paper_bgcolor:'transparent', plot_bgcolor:'transparent',
+            xaxis:{gridcolor:'rgba(255,255,255,.06)'}, yaxis:{gridcolor:'rgba(255,255,255,.06)'}}, {displayModeBar:false});
+    }
+
+    async function renderTS(){
+      const full = await loadFullSeries(); // full rolling history
+      const k = keyForMetric();
+
+      // choose a ticker visible in latest list (or fallback to first in full)
+      const latest = filterUniverse(sliceLatest(state.rows));
+      const t = latest[0]?.ticker || full[0]?.ticker || 'ICEAIR';
+
+      const series = full.filter(r => r.ticker === t)
+                         .map(r => ({ x: r.date, y: +r[k] }))
+                         .filter(p => Number.isFinite(p.y));
+
+      document.getElementById('ts-title').textContent = `Time Series — ${t}`;
+      Plotly.newPlot('chart-ts',
+        [{ x: series.map(p=>p.x), y: series.map(p=>p.y), type:'scatter', mode:'lines', line:{width:2} }],
+        { margin:{l:40,r:10,t:10,b:40}, paper_bgcolor:'transparent', plot_bgcolor:'transparent',
+          xaxis:{gridcolor:'rgba(255,255,255,.06)'}, yaxis:{gridcolor:'rgba(255,255,255,.06)'} },
+        { displayModeBar:true }
+      );
+    }
+
+    function renderTable(latest){
+      const k = keyForMetric();
+      const r = rankByMetric(latest, k).full;
+      const cols = ['Ticker','Name','Sector','Sharpe','VaR','ES','Vol','Return'];
+      const head = `<thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead>`;
+      const body = r.map(o=> `<tr>
+        <td>${o.ticker}</td><td>${o.name||''}</td><td>${o.sector||''}</td>
+        <td>${fmt(o.sharpe)}</td><td>${fmt(o.var)}</td><td>${fmt(o.es)}</td><td>${fmt(o.vol)}</td><td>${fmt(o.ret)}</td>
+      </tr>`).join('');
+      document.getElementById('tbl').innerHTML = head + '<tbody>' + body + '</tbody>';
+    }
+
+    // --- Main render ---
+    async function render(){
+      state.rows = await loadLatest();                 // latest snapshot per metric
+      const latest = filterUniverse(sliceLatest(state.rows));
+      renderKPIs(latest);
+      renderBars(latest);
+      renderHeat(latest);
+      renderHist(latest);
+      await renderTS();                                // full rolling series
+      renderTable(latest);
+    }
+
+    // --- Init ---
+    render();
+  </script>
+</body>
+</html>
