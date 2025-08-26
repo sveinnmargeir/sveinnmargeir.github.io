@@ -98,22 +98,12 @@
           <div>
             <label for="window">Window</label>
             <select id="window">
-              <option value="252">1Y (252d)</option>
+              <option value="30">30D (30d)</option>
+              <option value="90">90D (90d)</option>
+              <option value="252" selected>1Y (252d)</option>
               <option value="756">3Y (756d)</option>
               <option value="1260">5Y (1260d)</option>
             </select>
-          </div>
-          <div>
-            <label for="frequency">Sampling</label>
-            <select id="frequency">
-              <option>Daily</option>
-              <option>Weekly</option>
-              <option>Monthly</option>
-            </select>
-          </div>
-          <div>
-            <label for="rf">Risk-free (annual)</label>
-            <input id="rf" type="number" step="0.01" value="0.05" />
           </div>
           <div>
             <label>Universe</label>
@@ -130,8 +120,8 @@
       <!-- MAIN GRID -->
       <section class="grid">
         <article class="card">
-          <h3>Overview</h3>
-          <p class="sub">Key risk/return tiles update with your filters.</p>
+          <h3>Yfirlit</h3>
+          <p class="sub">Helstu tölur uppfærast miðað síun sem valin er hér til vinstri. </p>
           <div class="kpi" id="kpis"></div>
         </article>
 
@@ -187,16 +177,50 @@
     // --- CONFIG: point to your generated CSVs ---
     const CONFIG = {
       DATA_FILES: {
-        "All": {
-          "Sharpe": "data/metrics/sharpe.csv",
-          "VaR": "data/metrics/var.csv",
-          "Expected Shortfall": "data/metrics/es.csv",
-          "Volatility": "data/metrics/vol.csv",
-          "Return": "data/metrics/ret.csv"
+        "30d": {
+          "Sharpe": "data/metrics/30d/sharpe.csv",
+          "VaR": "data/metrics/30d/var.csv",
+          "Expected Shortfall": "data/metrics/30d/es.csv",
+          "Volatility": "data/metrics/30d/vol.csv",
+          "Return": "data/metrics/30d/ret.csv"
+        },
+        "90d": {
+          "Sharpe": "data/metrics/90d/sharpe.csv",
+          "VaR": "data/metrics/90d/var.csv",
+          "Expected Shortfall": "data/metrics/90d/es.csv",
+          "Volatility": "data/metrics/90d/vol.csv",
+          "Return": "data/metrics/90d/ret.csv"
+        },
+        "1y": {
+          "Sharpe": "data/metrics/1y/sharpe.csv",
+          "VaR": "data/metrics/1y/var.csv",
+          "Expected Shortfall": "data/metrics/1y/es.csv",
+          "Volatility": "data/metrics/1y/vol.csv",
+          "Return": "data/metrics/1y/ret.csv"
+        },
+        "3y": {
+          "Sharpe": "data/metrics/3y/sharpe.csv",
+          "VaR": "data/metrics/3y/var.csv",
+          "Expected Shortfall": "data/metrics/3y/es.csv",
+          "Volatility": "data/metrics/3y/vol.csv",
+          "Return": "data/metrics/3y/ret.csv"
+        },
+        "5y": {
+          "Sharpe": "data/metrics/5y/sharpe.csv",
+          "VaR": "data/metrics/5y/var.csv",
+          "Expected Shortfall": "data/metrics/5y/es.csv",
+          "Volatility": "data/metrics/5y/vol.csv",
+          "Return": "data/metrics/5y/ret.csv"
         }
       },
-      UNIVERSES: ["All"],                           // single universe for Iceland
-      FULL_SERIES_URL: "data/metrics/metrics_full.csv"
+      FULL_SERIES: {
+        "30d": "data/metrics/30d/metrics_full.csv",
+        "90d": "data/metrics/90d/metrics_full.csv",
+        "1y":  "data/metrics/1y/metrics_full.csv",
+        "3y":  "data/metrics/3y/metrics_full.csv",
+        "5y":  "data/metrics/5y/metrics_full.csv"
+      },
+      UNIVERSES: ["All"]
     };
 
     // build chips
@@ -230,11 +254,17 @@
     const fullCache = new Map();
 
     function dataURLFor(){
-      const u = state.universe;
-      const m = state.metric;
-      const map = CONFIG.DATA_FILES[u] || CONFIG.DATA_FILES['All'] || {};
-      return map[m] || map['Sharpe'];
+      return CONFIG.DATA_FILES[state.window][state.metric];
     }
+    async function loadFullSeries(){
+      const url = CONFIG.FULL_SERIES[state.window];
+      if(fullCache.has(url)) return fullCache.get(url);
+      const txt = await (await fetch(url)).text();
+      const rows = csvToRows(txt);
+      fullCache.set(url, rows);
+      return rows;
+    }
+
 
     async function loadLatest(){
       const url = dataURLFor();
@@ -256,21 +286,25 @@
     }
 
     // --- State & helpers ---
-    const state = { metric:'Sharpe', window:252, frequency:'Daily', rf:0.05, universe:'All', search:'', rows:[] };
+    const state = { metric:'Sharpe', window:'1y', universe:'All', search:'', rows:[] };
     function q(sel){ return document.querySelector(sel); }
     function fmt(x, d=2){ return (x==null || !isFinite(x)) ? '—' : (Math.abs(x)>=1000? x.toLocaleString(): (+x).toFixed(d)); }
 
     function applyControls(){
       state.metric = q('#metric').value;
-      state.window = +q('#window').value;
-      state.frequency = q('#frequency').value;
-      state.rf = parseFloat(q('#rf').value || '0');
+      const wval = q('#window').value;  // "30","90","252","756","1260"
+      state.window = (wval==='30') ? '30d' :
+                    (wval==='90') ? '90d' :
+                    (wval==='252') ? '1y'  :
+                    (wval==='756') ? '3y'  : '5y';
       state.search = q('#search').value.trim().toUpperCase();
-      state.universe = chipWrap.querySelector('.active')?.dataset.val || 'All';
+      state.universe = 'All';
       render();
     }
-    document.getElementById('apply').addEventListener('click', applyControls);
+
+    document.getElementById('window').addEventListener('change', applyControls);
     document.getElementById('metric').addEventListener('change', applyControls);
+
 
     function sliceLatest(rows){
       // assume one latest row per ticker in these CSVs
