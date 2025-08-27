@@ -150,7 +150,7 @@
 
         <footer class="card">
           <div class="foot">
-            <div>Síðast uppfært: </div>
+            <div>Síðast uppfært: <span id="dataSrc">—</span></div>
             <div>© <span id="yr"></span> Sveinn Margeir Hauksson</div>
           </div>
         </footer>
@@ -169,95 +169,70 @@
     });
     document.getElementById('yr').textContent = new Date().getFullYear();
 
-    // --- CONFIG: point to your generated CSVs ---
+    // --- CONFIG ---
     const CONFIG = {
       DATA_FILES: {
-        "30d": {
-          "Sharpe": "data/metrics/30d/sharpe.csv",
-          "VaR": "data/metrics/30d/var.csv",
-          "Expected Shortfall": "data/metrics/30d/es.csv",
-          "Volatility": "data/metrics/30d/vol.csv",
-          "Return": "data/metrics/30d/ret.csv"
-        },
-        "90d": {
-          "Sharpe": "data/metrics/90d/sharpe.csv",
-          "VaR": "data/metrics/90d/var.csv",
-          "Expected Shortfall": "data/metrics/90d/es.csv",
-          "Volatility": "data/metrics/90d/vol.csv",
-          "Return": "data/metrics/90d/ret.csv"
-        },
-        "1y": {
-          "Sharpe": "data/metrics/1y/sharpe.csv",
-          "VaR": "data/metrics/1y/var.csv",
-          "Expected Shortfall": "data/metrics/1y/es.csv",
-          "Volatility": "data/metrics/1y/vol.csv",
-          "Return": "data/metrics/1y/ret.csv"
-        },
-        "3y": {
-          "Sharpe": "data/metrics/3y/sharpe.csv",
-          "VaR": "data/metrics/3y/var.csv",
-          "Expected Shortfall": "data/metrics/3y/es.csv",
-          "Volatility": "data/metrics/3y/vol.csv",
-          "Return": "data/metrics/3y/ret.csv"
-        },
-        "5y": {
-          "Sharpe": "data/metrics/5y/sharpe.csv",
-          "VaR": "data/metrics/5y/var.csv",
-          "Expected Shortfall": "data/metrics/5y/es.csv",
-          "Volatility": "data/metrics/5y/vol.csv",
-          "Return": "data/metrics/5y/ret.csv"
-        }
+        "30d": {"Sharpe":"data/metrics/30d/sharpe.csv","VaR":"data/metrics/30d/var.csv","Expected Shortfall":"data/metrics/30d/es.csv","Volatility":"data/metrics/30d/vol.csv","Return":"data/metrics/30d/ret.csv"},
+        "90d": {"Sharpe":"data/metrics/90d/sharpe.csv","VaR":"data/metrics/90d/var.csv","Expected Shortfall":"data/metrics/90d/es.csv","Volatility":"data/metrics/90d/vol.csv","Return":"data/metrics/90d/ret.csv"},
+        "1y":  {"Sharpe":"data/metrics/1y/sharpe.csv","VaR":"data/metrics/1y/var.csv","Expected Shortfall":"data/metrics/1y/es.csv","Volatility":"data/metrics/1y/vol.csv","Return":"data/metrics/1y/ret.csv"},
+        "3y":  {"Sharpe":"data/metrics/3y/sharpe.csv","VaR":"data/metrics/3y/var.csv","Expected Shortfall":"data/metrics/3y/es.csv","Volatility":"data/metrics/3y/vol.csv","Return":"data/metrics/3y/ret.csv"},
+        "5y":  {"Sharpe":"data/metrics/5y/sharpe.csv","VaR":"data/metrics/5y/var.csv","Expected Shortfall":"data/metrics/5y/es.csv","Volatility":"data/metrics/5y/vol.csv","Return":"data/metrics/5y/ret.csv"}
       },
       FULL_SERIES: {
-        "30d": "data/metrics/30d/metrics_full.csv",
-        "90d": "data/metrics/90d/metrics_full.csv",
-        "1y":  "data/metrics/1y/metrics_full.csv",
-        "3y":  "data/metrics/3y/metrics_full.csv",
-        "5y":  "data/metrics/5y/metrics_full.csv"
+        "30d":"data/metrics/30d/metrics_full.csv",
+        "90d":"data/metrics/90d/metrics_full.csv",
+        "1y":"data/metrics/1y/metrics_full.csv",
+        "3y":"data/metrics/3y/metrics_full.csv",
+        "5y":"data/metrics/5y/metrics_full.csv"
       },
       UNIVERSES: ["All"]
     };
 
-    // build chips
+    // Universe chips
     const chipWrap = document.getElementById('chips-universe');
     CONFIG.UNIVERSES.forEach((u,i)=>{
       const b=document.createElement('button');
       b.className='chip'+(i===0?' active':'');
       b.dataset.val=u; b.textContent=u; chipWrap.appendChild(b);
     });
-    chipWrap.addEventListener('click',(e)=>{
+    chipWrap?.addEventListener('click',(e)=>{
       if(!e.target.classList.contains('chip')) return;
       [...chipWrap.children].forEach(c=>c.classList.remove('active'));
       e.target.classList.add('active');
       applyControls();
     });
 
-    // --- CSV helpers ---
+    // --- CSV helper (BOM-safe, tolerant headers) ---
     function csvToRows(txt){
-      const [head,...lines] = txt.trim().split(/\r?\n/);
-      const cols=head.split(',').map(s=>s.trim());
-      return lines.filter(Boolean).map(l=>{
-        const vals=l.split(',');
-        const o={};
-        cols.forEach((c,i)=> o[c]=isNaN(+vals[i])?vals[i]:+vals[i]);
-        return o;
-      });
+      const lines = txt.replace(/\r\n/g, '\n').trim().split('\n');
+      if (!lines.length) return [];
+      let head = lines[0].replace(/^\uFEFF/, '');            // strip BOM
+      const cols = head.split(',').map(s=>s.trim());
+      const out = [];
+      for (let i=1;i<lines.length;i++){
+        if(!lines[i]) continue;
+        const vals = lines[i].split(',');
+        const o = {};
+        for (let j=0;j<cols.length;j++){
+          const key = cols[j].trim();        // keep original names: date,ticker,...
+          const v = (vals[j]??'').trim();
+          o[key] = (!isNaN(v) && v!=='') ? +v : v;
+        }
+        out.push(o);
+      }
+      return out;
     }
 
     // --- Data loaders & cache ---
     const dataCache = new Map();
     const fullCache = new Map();
 
-    function dataURLFor(){
-      return CONFIG.DATA_FILES[state.window][state.metric];
-    }
-    
-
-
+    function dataURLFor(){ return CONFIG.DATA_FILES[state.window][state.metric]; }
 
     async function loadLatest(){
       const url = dataURLFor();
-      document.getElementById('dataSrc').textContent = url;
+      const el = document.getElementById('dataSrc');
+      if (el) el.textContent = url;
       if(dataCache.has(url)) return dataCache.get(url);
       const txt = await (await fetch(url)).text();
       const rows = csvToRows(txt);
@@ -265,47 +240,44 @@
       return rows;
     }
 
+    // ✅ Only ONE version of this function
     async function loadFullSeries(){
       const url = CONFIG.FULL_SERIES[state.window];
       if(fullCache.has(url)) return fullCache.get(url);
       const txt = await (await fetch(url)).text();
-      const rows = csvToRows(txt);      // expects: date,ticker,name,sector,ret,vol,sharpe,var,es
+      const rows = csvToRows(txt); // expects: date,ticker,name,sector,ret,vol,sharpe,var,es
       fullCache.set(url, rows);
       return rows;
     }
 
     // --- State & helpers ---
     const state = { metric:'Sharpe', window:'1y', universe:'All', search:'', rows:[] };
-
     function q(sel){ return document.querySelector(sel); }
     function fmt(x, d=2){ return (x==null || !isFinite(x)) ? '—' : (Math.abs(x)>=1000? x.toLocaleString(): (+x).toFixed(d)); }
 
     function applyControls(){
       state.metric = q('#metric').value;
       const w = q('#window').value;     // "30","90","252","756","1260"
-      state.window = (w==='30') ? '30d' :
-                    (w==='90') ? '90d' :
-                    (w==='252')? '1y'  :
-                    (w==='756')? '3y'  : '5y';
+      state.window = (w==='30') ? '30d' : (w==='90') ? '90d' : (w==='252')? '1y' : (w==='756')? '3y' : '5y';
       state.search = q('#search').value.trim().toUpperCase();
       render();
     }
+    document.getElementById('apply').addEventListener('click', applyControls);
     document.getElementById('window').addEventListener('change', applyControls);
     document.getElementById('metric').addEventListener('change', applyControls);
-    
 
     function sliceLatest(rows){
-      // assume one latest row per ticker in these CSVs
+      if (!Array.isArray(rows) || rows.length===0) return [];
       const seen = new Set(), out=[];
       for(const r of rows){
-        if(seen.has(r.ticker)) continue;
-        seen.add(r.ticker); out.push(r);
+        const t = (r.ticker||'').toString();
+        if(!t || seen.has(t)) continue;
+        seen.add(t); out.push(r);
       }
       return out;
     }
 
     function filterUniverse(rows){
-      // only apply search since we have 1 universe
       return rows.filter(r=>{
         const passS = !state.search || (r.ticker||'').toUpperCase().includes(state.search) || (r.name||'').toUpperCase().includes(state.search);
         return passS;
@@ -326,9 +298,7 @@
     function renderKPIs(latest){
       const k = keyForMetric();
       const m = rankByMetric(latest, k);
-      const best = m.top[0];
-      const worst = m.bottom[0];
-      const avg = latest.length ? latest.reduce((s,r)=> s + (+r[k]||0), 0) / latest.length : 0;
+      const best = m.top[0], worst = m.bottom[0];
       q('#kpis').innerHTML = `
         <div class="tile"><div class="label">Universe</div><div class="value">${state.universe}</div></div>
         <div class="tile"><div class="label">Metric</div><div class="value">${state.metric}</div></div>
@@ -341,10 +311,10 @@
       const r = rankByMetric(latest, k);
       const labels = r.top.map(x=>x.ticker).concat(r.bottom.map(x=>x.ticker));
       const vals = r.top.map(x=>+x[k]).concat(r.bottom.map(x=>+x[k]));
-      Plotly.newPlot('chart-bars', [{
-        x: labels, y: vals, type:'bar'
-      }], {margin:{l:40,r:10,t:10,b:40}, paper_bgcolor:'transparent', plot_bgcolor:'transparent',
-           xaxis:{gridcolor:'rgba(255,255,255,.06)'}, yaxis:{gridcolor:'rgba(255,255,255,.06)'}} , {displayModeBar:false});
+      Plotly.newPlot('chart-bars', [{ x: labels, y: vals, type:'bar' }],
+        {margin:{l:40,r:10,t:10,b:40}, paper_bgcolor:'transparent', plot_bgcolor:'transparent',
+         xaxis:{gridcolor:'rgba(255,255,255,.06)'}, yaxis:{gridcolor:'rgba(255,255,255,.06)'}},
+        {displayModeBar:false});
     }
 
     function renderHeat(latest){
@@ -353,33 +323,31 @@
       const keys = ['1Y','3Y','5Y'];
       const tickers = latest.map(r=>r.ticker);
       const z = keys.map((_,i)=> latest.map(r=> (+r[k]||0) * (1 + (i-1)*0.15)));
-      Plotly.newPlot('chart-heat', [{
-        z, x: tickers, y: keys, type:'heatmap', showscale:true
-      }], {margin:{l:60,r:10,t:10,b:40}, paper_bgcolor:'transparent', plot_bgcolor:'transparent'}, {displayModeBar:false});
+      Plotly.newPlot('chart-heat', [{ z, x: tickers, y: keys, type:'heatmap', showscale:true }],
+        {margin:{l:60,r:10,t:10,b:40}, paper_bgcolor:'transparent', plot_bgcolor:'transparent'},
+        {displayModeBar:false});
     }
 
     function renderHist(latest){
       const k = keyForMetric();
       const vals = latest.map(r=> +r[k] ).filter(v=> Number.isFinite(v));
-      Plotly.newPlot('chart-hist', [{
-        x: vals, type:'histogram', nbinsx: 20
-      }], {margin:{l:40,r:10,t:10,b:40}, paper_bgcolor:'transparent', plot_bgcolor:'transparent',
-            xaxis:{gridcolor:'rgba(255,255,255,.06)'}, yaxis:{gridcolor:'rgba(255,255,255,.06)'}}, {displayModeBar:false});
+      Plotly.newPlot('chart-hist', [{ x: vals, type:'histogram', nbinsx: 20 }],
+        {margin:{l:40,r:10,t:10,b:40}, paper_bgcolor:'transparent', plot_bgcolor:'transparent',
+         xaxis:{gridcolor:'rgba(255,255,255,.06)'}, yaxis:{gridcolor:'rgba(255,255,255,.06)'}},
+        {displayModeBar:false});
     }
 
     async function renderTS(){
-      const full = await loadFullSeries(); // full rolling history
+      const full = await loadFullSeries();
       const k = keyForMetric();
-
-      // choose a ticker visible in latest list (or fallback to first in full)
       const latest = filterUniverse(sliceLatest(state.rows));
       const t = latest[0]?.ticker || full[0]?.ticker || 'ICEAIR';
 
-      const series = full.filter(r => r.ticker === t)
+      const series = full.filter(r => (r.ticker||'') === t)
                          .map(r => ({ x: r.date, y: +r[k] }))
                          .filter(p => Number.isFinite(p.y));
 
-      document.getElementById('ts-title').textContent = `Time Series — ${t}`;
+      document.getElementById('ts-title').textContent = `Sögulegt — ${t}`;
       Plotly.newPlot('chart-ts',
         [{ x: series.map(p=>p.x), y: series.map(p=>p.y), type:'scatter', mode:'lines', line:{width:2} }],
         { margin:{l:40,r:10,t:10,b:40}, paper_bgcolor:'transparent', plot_bgcolor:'transparent',
@@ -402,13 +370,14 @@
 
     // --- Main render ---
     async function render(){
-      state.rows = await loadLatest();
+      try {
+        state.rows = await loadLatest();
+      } catch(e){ console.error('Failed to load latest', e); state.rows=[]; }
       const latest = filterUniverse(sliceLatest(state.rows));
       renderKPIs(latest); renderBars(latest); renderHeat(latest); renderHist(latest);
-      await renderTS();                    // important: await
+      try { await renderTS(); } catch(e){ console.error('Failed to render TS', e); }
       renderTable(latest);
     }
-
 
     // --- Init ---
     render();
