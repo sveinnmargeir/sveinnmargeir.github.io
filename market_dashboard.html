@@ -260,10 +260,11 @@
       const url = CONFIG.FULL_SERIES[state.window];
       if(fullCache.has(url)) return fullCache.get(url);
       const txt = await (await fetch(url)).text();
-      const rows = csvToRows(txt);
+      const rows = csvToRows(txt);      // expects: date,ticker,name,sector,ret,vol,sharpe,var,es
       fullCache.set(url, rows);
       return rows;
     }
+
 
 
     async function loadLatest(){
@@ -287,24 +288,23 @@
 
     // --- State & helpers ---
     const state = { metric:'Sharpe', window:'1y', universe:'All', search:'', rows:[] };
+
     function q(sel){ return document.querySelector(sel); }
     function fmt(x, d=2){ return (x==null || !isFinite(x)) ? '—' : (Math.abs(x)>=1000? x.toLocaleString(): (+x).toFixed(d)); }
 
     function applyControls(){
       state.metric = q('#metric').value;
-      const wval = q('#window').value;  // "30","90","252","756","1260"
-      state.window = (wval==='30') ? '30d' :
-                    (wval==='90') ? '90d' :
-                    (wval==='252') ? '1y'  :
-                    (wval==='756') ? '3y'  : '5y';
+      const w = q('#window').value;     // "30","90","252","756","1260"
+      state.window = (w==='30') ? '30d' :
+                    (w==='90') ? '90d' :
+                    (w==='252')? '1y'  :
+                    (w==='756')? '3y'  : '5y';
       state.search = q('#search').value.trim().toUpperCase();
-      state.universe = 'All';
       render();
     }
-
     document.getElementById('window').addEventListener('change', applyControls);
     document.getElementById('metric').addEventListener('change', applyControls);
-
+    
 
     function sliceLatest(rows){
       // assume one latest row per ticker in these CSVs
@@ -414,15 +414,13 @@
 
     // --- Main render ---
     async function render(){
-      state.rows = await loadLatest();                 // latest snapshot per metric
+      state.rows = await loadLatest();
       const latest = filterUniverse(sliceLatest(state.rows));
-      renderKPIs(latest);
-      renderBars(latest);
-      renderHeat(latest);
-      renderHist(latest);
-      await renderTS();                                // full rolling series
+      renderKPIs(latest); renderBars(latest); renderHeat(latest); renderHist(latest);
+      await renderTS();                    // important: await
       renderTable(latest);
     }
+
 
     // --- Init ---
     render();
