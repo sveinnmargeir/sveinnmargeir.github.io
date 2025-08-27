@@ -251,14 +251,7 @@
     function dataURLFor(){
       return CONFIG.DATA_FILES[state.window][state.metric];
     }
-    async function loadFullSeries(){
-      const url = CONFIG.FULL_SERIES[state.window];
-      if(fullCache.has(url)) return fullCache.get(url);
-      const txt = await (await fetch(url)).text();
-      const rows = csvToRows(txt);      // expects: date,ticker,name,sector,ret,vol,sharpe,var,es
-      fullCache.set(url, rows);
-      return rows;
-    }
+    
 
 
 
@@ -269,6 +262,15 @@
       const txt = await (await fetch(url)).text();
       const rows = csvToRows(txt);
       dataCache.set(url, rows);
+      return rows;
+    }
+
+    async function loadFullSeries(){
+      const url = CONFIG.FULL_SERIES[state.window];
+      if(fullCache.has(url)) return fullCache.get(url);
+      const txt = await (await fetch(url)).text();
+      const rows = csvToRows(txt);      // expects: date,ticker,name,sector,ret,vol,sharpe,var,es
+      fullCache.set(url, rows);
       return rows;
     }
 
