@@ -69,12 +69,12 @@
     <div class="wrap">
       <div class="brand">
         <div class="logo" aria-hidden="true"></div>
-        <strong>Market Dashboards</strong>
+        <strong>Íslenski Markaðurinn</strong>
       </div>
       <nav>
-        <a href="index.html">Home</a>
+        <a href="index.html">Heim</a>
         <a href="#">Docs</a>
-        <button class="tgl" id="modeToggle" title="Toggle Light/Dark">Toggle theme</button>
+        <button class="tgl" id="modeToggle" title="Toggle Light/Dark">Breyta þema</button>
       </nav>
     </div>
   </header>
@@ -83,10 +83,10 @@
     <div class="layout">
       <!-- SIDEBAR FILTERS -->
       <aside class="side">
-        <h3>Filters</h3>
+        <h3>Sía</h3>
         <div class="f">
           <div>
-            <label for="metric">Metric</label>
+            <label for="metric">Mæla eftir</label>
             <select id="metric">
               <option>Sharpe</option>
               <option>VaR</option>
@@ -96,7 +96,7 @@
             </select>
           </div>
           <div>
-            <label for="window">Window</label>
+            <label for="window">Lengd tímabils</label>
             <select id="window">
               <option value="30">30D (30d)</option>
               <option value="90">90D (90d)</option>
@@ -106,14 +106,10 @@
             </select>
           </div>
           <div>
-            <label>Universe</label>
-            <div class="chips" id="chips-universe"></div>
+            <label for="search">Leita að sérstöku fyrirtæki</label>
+            <input id="search" placeholder="t.d., ICEAIR, ALVO, KVIKA" />
           </div>
-          <div>
-            <label for="search">Search ticker/company</label>
-            <input id="search" placeholder="e.g., ICEAIR, ALVO, KVIKA" />
-          </div>
-          <button class="tgl" id="apply">Apply</button>
+          <button class="tgl" id="apply">Skoða</button>
         </div>
       </aside>
 
@@ -121,41 +117,40 @@
       <section class="grid">
         <article class="card">
           <h3>Yfirlit</h3>
-          <p class="sub">Helstu tölur uppfærast miðað síun sem valin er hér til vinstri. </p>
+          <p class="sub">Helstu tölur uppfærast miðað við þá síun sem er valin. </p>
           <div class="kpi" id="kpis"></div>
         </article>
 
         <article class="card two">
-          <h3 id="ts-title">Time Series</h3>
-          <p class="sub">Selected metric across time for chosen ticker.</p>
+          <h3 id="ts-title">Sögulegt verð</h3>
+          <p class="sub">Miðað við valið tímabil.</p>
           <div id="chart-ts" style="height:340px"></div>
         </article>
         <article class="card four">
-          <h3>Leaders & Laggards</h3>
-          <p class="sub">Top and bottom by selected metric.</p>
+          <h3>Bestu & Verstu</h3>
+          <p class="sub">Hæstu og lægstu fyrirtæki m.v. valda síun.</p>
           <div id="chart-bars" style="height:340px"></div>
         </article>
 
         <article class="card half">
-          <h3>Heatmap</h3>
-          <p class="sub">Metric by ticker and window.</p>
+          <h3>Hitakort</h3>
           <div id="chart-heat" style="height:320px"></div>
         </article>
         <article class="card half">
-          <h3>Distribution</h3>
-          <p class="sub">Cross-sectional distribution of the metric.</p>
+          <h3>Dreifing</h3>
+          <p class="sub">Þversniðin dreifing m.v. valda síun.</p>
           <div id="chart-hist" style="height:320px"></div>
         </article>
 
         <article class="card">
-          <h3>Risk Table</h3>
-          <p class="sub">Sortable table of assets with Sharpe, VaR, ES, Vol, Returns.</p>
+          <h3>Áhættutafla</h3>
+          <p class="sub">Breytanleg tafla sem sýnir Sharpe hlutfall, Value at Risk (95%), Expected Shortfall (95%), Volatility og Returns.</p>
           <div class="tbl"><table id="tbl"></table></div>
         </article>
 
         <footer class="card">
           <div class="foot">
-            <div>Data source: <span id="dataSrc">—</span></div>
+            <div>Síðast uppfært: </div>
             <div>© <span id="yr"></span> Sveinn Margeir Hauksson</div>
           </div>
         </footer>
@@ -274,15 +269,6 @@
       const txt = await (await fetch(url)).text();
       const rows = csvToRows(txt);
       dataCache.set(url, rows);
-      return rows;
-    }
-
-    async function loadFullSeries(){
-      const url = CONFIG.FULL_SERIES_URL;
-      if(fullCache.has(url)) return fullCache.get(url);
-      const txt = await (await fetch(url)).text();
-      const rows = csvToRows(txt); // schema: date,ticker,name,sector,ret,vol,sharpe,var,es
-      fullCache.set(url, rows);
       return rows;
     }
 
