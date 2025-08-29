@@ -68,6 +68,33 @@
 
     footer{margin:46px 0 60px;color:var(--muted)}
     .foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;border-top:1px solid var(--ring);padding-top:22px}
+      /* ⬇️ ADD THE NEW STYLES HERE */
+    .btn.pill {
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--ring);
+      background: rgba(255,255,255,.04);
+      color: var(--txt);
+      font-weight: 600;
+      line-height: 1;
+      transition: border-color .15s ease, background .15s ease, transform .06s ease;
+    }
+    .btn.pill:hover {
+      border-color: color-mix(in oklab, var(--accent) 40%, var(--ring));
+      background: color-mix(in oklab, var(--accent) 8%, transparent);
+      transform: translateY(-1px);
+    }
+    .btn.pill:active { transform: translateY(0); }
+
+    .btn.pill .icon {
+      width:18px; height:18px; display:block; fill: currentColor;
+    }
+
+    .profile .meta { margin-top: 14px; }
+    .profile .actions { margin-top: 14px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+    .profile .alt-contact { color: var(--muted); font-size: .95rem; }
+    .profile .alt-contact a { color: var(--accent); }
   </style>
 </head>
 <body>
@@ -78,10 +105,10 @@
         <h1>Sveinn Margeir Hauksson • Quant work</h1>
       </div>
       <nav>
-        <a href="#projects">Projects</a>
-        <a href="#notes">Notes</a>
+        <a href="#projects">Markaðurinn</a>
+        <a href="#notes">Verkefni</a>
         <a href="#dashboards">Ferilskrá</a>
-        <a href="https://github.com/sveinnmargeir" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/sveinn-hauksson/" target="_blank" rel="noopener" rel="noopener">LinkedIn</a>
         <button class="tgl" id="modeToggle" title="Toggle Light/Dark">Breyta þema</button>
       </nav>
     </div>
@@ -90,90 +117,52 @@
   <main class="container">
     <!-- HERO -->
     <section class="hero" aria-labelledby="site-title">
-      <div class="lead">Quant Finance • Risk • Data</div>
-      <h2 id="site-title" class="title">Interactive finance projects & research notes</h2>
-      <p class="subtitle">A growing collection of live dashboards and write‑ups: factor models, risk analytics, hedging simulations, and Icelandic market studies. Everything is reproducible—code on GitHub, visuals in the browser.</p>
+      <div class="lead">Megindlegar greiningar • Fjármál • Áhætta</div>
+      <h2 id="site-title" class="title">Gagnvirkt verkefnasafn</h2>
+      <p class="subtitle">Úrvinnsla gagna, reiknilíkön og myndrænar framsetningar á ýmis verkefnum. </p>
       <div class="cta">
         <a class="btn primary" href="market_dashboard.html">Íslenski markaðurinn</a>
-        <a class="btn" href="#verkefni">Skoða verkefni</a>
+        <a class="btn" href="#verkefni">Skoða öll verkefni</a>
       </div>
     </section>
 
     <!-- FEATURED ROW -->
-    <section class="deck" id="projects">
-      <article class="card half">
-        <h3>Jet Fuel Hedging Simulator</h3>
-        <p>Momentum & volatility‑aware hedge rules on Brent/Jet curves with Monte Carlo paths and effective price analysis.</p>
-        <div class="meta">
-          <span class="tag">Python</span><span class="tag">Plotly</span><span class="tag">Risk</span>
-        </div>
-        <div id="spark1" class="spark"></div>
-        <div class="panel">Link your GitHub repo and live HTML dashboard here.</div>
-      </article>
-
-      <article class="card half">
-        <h3>Icelandic Market Sharpe Heatmap</h3>
-        <p>Rolling Sharpe across equities and windows (1Y/3Y/5Y). Toggle risk‑free assumptions and sampling frequency.</p>
-        <div class="meta">
-          <span class="tag">Pandas</span><span class="tag">Backtest</span><span class="tag">Visualization</span>
-        </div>
-        <div id="spark2" class="spark"></div>
-        <div class="panel">Drop your Plotly heatmap export or a link to the notebook.</div>
-      </article>
-
-      <article class="card third">
-        <h3>Factor Timing Notes</h3>
-        <p>Signals, priors, and what actually holds in small markets. Short essays with references.</p>
-        <div class="meta"><span class="tag">Notes</span><span class="tag">Alpha</span></div>
-      </article>
-      <article class="card third">
-        <h3>Risk Toolkit</h3>
-        <p>Sharpe, Sortino, VaR/ES, drawdowns, turnover, and cost models packaged for reuse.</p>
-        <div class="meta"><span class="tag">Library</span><span class="tag">Metrics</span></div>
-      </article>
-      <article class="card third">
-        <h3>Curve Structure Explorer</h3>
-        <p>Term‑structure diagnostics on Brent & Jet forward curves with regime flags.</p>
-        <div class="meta"><span class="tag">Term Structure</span><span class="tag">Signals</span></div>
-      </article>
-    </section>
+    
 
     <!-- SPLIT: DASHBOARD + LINKS -->
-    <section class="grid-2" id="dashboards">
-      <div class="card">
-        <h3>Live Dashboard: Rolling Sharpe (demo data)</h3>
-        <p class="subtitle">This Plotly block uses synthetic data as a placeholder. Replace with your real CSV or JSON.</p>
-        <div id="bigChart" style="height:360px;margin-top:12px"></div>
-      </div>
+  
       <aside class="card" id="notes">
-        <h3>Fresh Links</h3>
+        <h3>Nýjustu verkefni</h3>
         <div class="list">
-          <a href="#">Project README – Hedging Simulator <span>→</span></a>
-          <a href="#">Notebook – Icelandic Sharpe Heatmap <span>→</span></a>
-          <a href="#">Essay – How I measure risk <span>→</span></a>
-          <a href="#">About – Contact & CV <span>→</span></a>
+          <a href="#">Íslenski markaðurinn í áhættutölum <span>→</span></a>
+          <a href="#">Sharpe Hlutföll á íslenskum markaði <span>→</span></a>
+          <a href="#">Value at Risk og Expected Shortfall <span>→</span></a>
         </div>
-        <div class="panel" style="margin-top:12px">Tip: Set these to your GitHub READMEs, nbviewer notebooks, or exported HTML dashboards.</div>
       </aside>
     </section>
 
     <!-- ABOUT / CONTACT -->
     <section class="deck" style="margin-top:8px">
-      <article class="card">
-        <h3>About</h3>
-        <p>I'm an MFE candidate at UCLA Anderson (’25) building practical finance tools: backtests, risk dashboards, and airline hedging simulations. I care about clarity, reproducibility, and clean visuals.</p>
+      <article class="card profile">
+        <h3>Um mig</h3>
+        <p>
+          ....
+        </p>
         <div class="meta">
           <span class="tag">UCLA MFE</span>
           <span class="tag">Reykjavík ↔ Los Angeles</span>
-          <span class="tag">Soccer & Golf</span>
+          <span class="tag">Fótbolti & Golf</span>
         </div>
-      </article>
-      <article class="card">
-        <h3>Contact</h3>
-        <p>For roles, collaborations, or questions: <a href="mailto:sveinn.hauksson.2025@anderson.ucla.edu">sveinn.hauksson.2025@anderson.ucla.edu</a> • <a href="https://www.linkedin.com/in/sveinn-hauksson/" target="_blank" rel="noopener">LinkedIn</a> • <a href="https://github.com/sveinnmargeir" target="_blank" rel="noopener">GitHub</a></p>
-        <div class="panel">GitHub Pages is static. For a real newsletter, use Buttondown, Substack, or ConvertKit and link out.</div>
+    
+        <div class="actions">
+          <a class="btn pill" href="mailto:sveinn.hauksson.2025@anderson.ucla.edu">Senda póst</a>
+          <a class="btn pill" href="https://www.linkedin.com/in/sveinn-hauksson/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        
+        
       </article>
     </section>
+    
 
     <footer>
       <div class="foot">
