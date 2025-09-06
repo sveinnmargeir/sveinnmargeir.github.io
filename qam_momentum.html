@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="is">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sektor-hlutfallsleg hröðunarmómenta • Sveinn Margeir Hauksson</title>
+  <meta name="description" content="Sektor-hlutfallsleg mómentumhröðun: aðferð, niðurstöður og áhætta. Skýrsla og kynning." />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#0b0d12" />
+  <link rel="icon" href="assets/img/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root { --bg:#0b0d12; --card:#121620; --muted:#c8d0e0; --accent:#58a6ff; --txt:#e6ecf5; --border:#202638; --ring:var(--border); --shadow:0 10px 30px rgba(0,0,0,.35); }
+    :root.light { --bg:#f6f8fb; --card:#ffffff; --muted:#5b6470; --accent:#145cff; --txt:#0c1020; --border:#e8edf5; --ring:#e8edf5; --shadow:0 10px 25px rgba(10,40,120,.10); }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--txt)}
+    a{color:var(--accent);text-decoration:none}
+    .container{max-width:1050px;margin:0 auto;padding:24px}
+
+    header{position:sticky;top:0;backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--ring);z-index:40}
+    header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 28px;background:color-mix(in oklab, var(--bg) 85%, transparent)}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#6ee7ff);box-shadow:var(--shadow)}
+    nav{display:flex;gap:16px;align-items:center}
+    button.tgl{appearance:none;border:1px solid var(--ring);background:var(--card);color:var(--txt);padding:8px 12px;border-radius:12px;cursor:pointer}
+
+    .hero{display:grid;gap:12px;padding:28px 0 6px}
+    .eyebrow{color:var(--muted);font-size:13px;letter-spacing:.18em;text-transform:uppercase}
+    h1{font-size:32px;line-height:1.15;margin:0}
+    .sub{color:var(--muted);max-width:75ch}
+
+    .stack{display:grid;gap:16px;margin-top:12px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
+    .card h2,.card h3{margin:0 0 8px}
+    .card p{margin:0 0 8px;color:var(--muted)}
+    .pill{display:inline-block;font-size:12px;color:var(--muted);border:1px dashed var(--border);padding:4px 8px;border-radius:999px}
+    .meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:#0f1320;color:var(--txt)}
+    .btn:hover{background:#131a2b}
+    .btn.primary{background:linear-gradient(135deg,var(--accent),#6ee7ff);border-color:transparent;color:#001022;font-weight:600}
+    .btn.pill{border-radius:999px}
+
+    /* KPI */
+    .kpi{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    @media (min-width:640px){ .kpi{grid-template-columns:repeat(4,1fr)} }
+    .k{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:12px}
+    .k .v{font-weight:700;font-size:18px}
+    .k .l{font-size:12px;color:var(--muted)}
+
+    /* PDF tabs */
+    .tabs{display:flex;gap:8px;flex-wrap:wrap}
+    .tab{appearance:none;border:1px solid var(--border);background:#0f1320;color:var(--txt);padding:8px 12px;border-radius:10px;cursor:pointer}
+    .tab[aria-selected="true"]{background:linear-gradient(135deg,var(--accent),#6ee7ff);color:#001022;border-color:transparent;font-weight:600}
+    .pdf-wrap{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card);margin-top:12px}
+    .pdf-frame{width:100%;height:85vh;display:block}
+
+    footer{border-top:1px solid var(--border);color:var(--muted);padding:20px 0;margin-top:34px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <h1>Sveinn Margeir Hauksson • Quant work</h1>
+      </div>
+      <nav>
+        <a href="index.html">Heim</a>
+        <a href="projects.html">Verkefni</a>
+        <a href="market_dashboard.html">Markaðsmælaborð</a>
+        <a href="https://www.linkedin.com/in/sveinn-hauksson/" target="_blank" rel="noopener">LinkedIn</a>
+        <button class="tgl" id="modeToggle" title="Toggle Light/Dark">Breyta þema</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HERO -->
+    <section class="hero">
+      <span class="eyebrow">Verkefni — Quantitative Asset Management</span>
+      <h1>Sektor-hlutfallsleg hröðunarmómenta</h1>
+      <p class="sub">
+        Við bætum við hefðbundna mómentum-nálgun með <em>hröðun</em> (second-order momentum) og
+        <em>sektor-hlutfallslegu</em> staðli. Lykilniðurstöður sýna marktækt FF3-alfa fyrir blönduðu merkjalíkönin
+        og sterkan árangur eftir 2000 fyrir volatílíserað mómentum. (FF3-alfa 0,76% á mánuði, t = 3,82 fyrir
+        80/20 blend; hæsta ROC Sharpe bætir við vol-aðlögun). :contentReference[oaicite:0]{index=0} :contentReference[oaicite:1]{index=1}
+      </p>
+      <div class="meta">
+        <span class="pill">UCLA Anderson MFE</span>
+        <span class="pill">Equities</span>
+        <span class="pill">Momentum & Acceleration</span>
+        <span class="pill">Sector-Relative</span>
+      </div>
+      <div class="actions">
+        <a class="btn" href="assets/pdfs/QAM_report.pdf" target="_blank" rel="noopener">Opna Skýrslu (PDF)</a>
+        <a class="btn" href="assets/pdfs/QAM_Momentum.pdf" target="_blank" rel="noopener">Opna Kynningu (PDF)</a>
+        <a class="btn pill" href="projects.html">Aftur í verkefni</a>
+      </div>
+    </section>
+
+    <!-- CONTENT -->
+    <section class="stack">
+      <article class="card">
+        <h2>Lykiltölur</h2>
+        <div class="kpi">
+          <div class="k"><div class="v">0,76%/mán</div><div class="l">FF3 Alfa (80/20 blend)</div></div>
+          <div class="k"><div class="v">t = 3,82</div><div class="l">Marktækni (FF3)</div></div>
+          <div class="k"><div class="v">0,46</div><div class="l">Post-2000 Sharpe (VolAdj)</div></div>
+          <div class="k"><div class="v">~98%/mán</div><div class="l">Turnover (hátt)</div></div>
+        </div>
+        <p style="margin-top:6px">
+          Nánari borð: alfa-tölur, pre/post-2000 Sharpe og veltutíðni í skýrslunni og glærunum. :contentReference[oaicite:2]{index=2} :contentReference[oaicite:3]{index=3}
+        </p>
+      </article>
+
+      <!-- Two-PDF TABBED VIEWER -->
+      <article class="card" id="viewer">
+        <h2>Skjalafyrirsýn</h2>
+        <p class="sub">Skiptu á milli skýrslu og kynningar án þess að yfirgefa síðuna.</p>
+
+        <div class="tabs" role="tablist" aria-label="Veldu skjal">
+          <button class="tab" role="tab" id="tab-report"  aria-selected="true" aria-controls="panel-report">Skýrsla</button>
+          <button class="tab" role="tab" id="tab-slides"  aria-selected="false" aria-controls="panel-slides">Kynning</button>
+        </div>
+
+        <div class="pdf-wrap" id="panel-report" role="tabpanel" aria-labelledby="tab-report">
+          <iframe class="pdf-frame" src="assets/pdfs/QAM_report.pdf#view=FitH&toolbar=1" title="QAM Report PDF"></iframe>
+        </div>
+        <div class="pdf-wrap" id="panel-slides" role="tabpanel" aria-labelledby="tab-slides" hidden>
+          <iframe class="pdf-frame" src="assets/pdfs/QAM_Momentum.pdf#view=FitH&toolbar=1" title="QAM Slides PDF"></iframe>
+        </div>
+
+        <div class="actions">
+          <a class="btn" href="assets/pdfs/QAM_report.pdf" target="_blank" rel="noopener">Opna skýrslu í nýjum glugga</a>
+          <a class="btn" href="assets/pdfs/QAM_Momentum.pdf" target="_blank" rel="noopener">Opna kynningu í nýjum glugga</a>
+          <a class="btn pill" href="assets/pdfs/QAM_report.pdf" download>Hlaða niður skýrslu</a>
+          <a class="btn pill" href="assets/pdfs/QAM_Momentum.pdf" download>Hlaða niður kynningu</a>
+        </div>
+
+        <p style="margin-top:8px;color:var(--muted);font-size:14px;">
+          Ef forskoðun ræsist ekki á tækinu: opnaðu hlekkina hér að ofan.
+        </p>
+      </article>
+
+      <article class="card">
+        <h2>Samantekt</h2>
+        <ul>
+          <li><strong>Merki:</strong> 12m mómentum (t−12→t−2), <em>hröðun</em> (breyting í mómentum), sektor-staðlanir, vol-aðlögun og blöndur.</li>
+          <li><strong>Útfærsla:</strong> Mánuðleg röðun (DM-breakpoints), decíl 10 − decíl 1 (WML), value-weighted.</li>
+          <li><strong>Niðurstöður:</strong> Sterk FF3-alfa og bætt post-2000 Sharpe fyrir vol-aðlagað mómentum; 80/20 blandan með marktæku alfa. :contentReference[oaicite:4]{index=4}</li>
+          <li><strong>Kostnaður/áhætta:</strong> Há sveifla og umtalsverð velta (≈98%/mán) sem þarf að verðleggja í framkvæmd. :contentReference[oaicite:5]{index=5}</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">© <span id="year"></span> Sveinn Margeir Hauksson • Quant Projects</div>
+  </footer>
+
+  <script>
+    // Theme toggle (persist)
+    (function(){
+      const saved = localStorage.getItem('theme');
+      if(saved === 'light'){ document.documentElement.classList.add('light'); }
+      const btn = document.getElementById('modeToggle');
+      if(btn){
+        btn.addEventListener('click', ()=>{
+          const light = document.documentElement.classList.toggle('light');
+          localStorage.setItem('theme', light ? 'light' : 'dark');
+        });
+      }
+      document.getElementById('year').textContent = new Date().getFullYear();
+    })();
+
+    // Simple tabs
+    (function(){
+      const tabReport = document.getElementById('tab-report');
+      const tabSlides = document.getElementById('tab-slides');
+      const panelReport = document.getElementById('panel-report');
+      const panelSlides = document.getElementById('panel-slides');
+
+      function select(tab){
+        const isReport = tab === 'report';
+        tabReport.setAttribute('aria-selected', isReport ? 'true':'false');
+        tabSlides.setAttribute('aria-selected', !isReport ? 'true':'false');
+        panelReport.hidden = !isReport;
+        panelSlides.hidden = isReport;
+      }
+      tabReport.addEventListener('click', ()=>select('report'));
+      tabSlides.addEventListener('click', ()=>select('slides'));
+    })();
+  </script>
+</body>
+</html>
