@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sveinn Margeir Hauksson • Quant Projects</title>
+  <meta name="description" content="Interactive quantitative finance projects, dashboards, and notes by Sveinn Margeir Hauksson (UCLA MFE)." />
+  <meta name="color-scheme" content="dark light" />
+  <meta property="og:title" content="Quant Projects – Sveinn Margeir Hauksson" />
+  <meta property="og:description" content="Interactive quantitative finance projects, dashboards, and notes." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" href="assets/img/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    /* =====================================================
+       Apple-inspired theme (light/dark, minimal, typographic)
+       ===================================================== */
+
+    :root {
+      /* Light mode */
+      --bg: #ffffff;
+      --surface: #f5f5f7;
+      --card: #ffffff;
+      --ink: #1d1d1f;
+      --muted: #6e6e73;
+      --link: #06c;
+      --link-hover: #0040aa;
+      --border: rgba(0,0,0,.08);
+      --hairline: rgba(0,0,0,.06);
+      --shadow: 0 8px 24px rgba(0,0,0,.08);
+      --focus: 0 0 0 4px rgba(0,102,204,.25);
+
+      /* Buttons */
+      --btn-bg: #1d1d1f;
+      --btn-fg: #fff;
+      --btn-hover: #000;
+      --btn-outline: rgba(0,0,0,.12);
+
+      /* Header glass */
+      --glass: rgba(255,255,255,.72);
+      --glass-border: rgba(0,0,0,.08);
+    }
+
+    :root.dark {
+      /* Dark mode */
+      --bg: #000000;
+      --surface: #111113;
+      --card: #0b0b0c;
+      --ink: #f5f5f7;
+      --muted: #a1a1a6;
+      --link: #2997ff;
+      --link-hover: #78b6ff;
+      --border: rgba(255,255,255,.10);
+      --hairline: rgba(255,255,255,.08);
+      --shadow: 0 12px 30px rgba(0,0,0,.55);
+      --focus: 0 0 0 4px rgba(41,151,255,.35);
+
+      --btn-bg: #f5f5f7;
+      --btn-fg: #000;
+      --btn-hover: #fff;
+      --btn-outline: rgba(255,255,255,.18);
+
+      --glass: rgba(22,22,24,.78);
+      --glass-border: rgba(255,255,255,.08);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not(.forced) { color-scheme: dark; }
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, system-ui, Arial, sans-serif;
+      background:var(--bg); color:var(--ink);
+      text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased;
+    }
+
+    a{color:var(--link); text-decoration:none}
+    a:hover{ text-decoration: underline; text-underline-offset: 2px; }
+
+    .container{ max-width: 980px; margin-inline:auto; padding: 24px; }
+
+    /* Header — glass, centered nav, subtle hairline */
+    header{ position:sticky; top:0; z-index:40; border-bottom:1px solid var(--glass-border); backdrop-filter:saturate(180%) blur(20px); background:var(--glass); }
+    header .wrap{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 20px; }
+    .brand{ display:flex; align-items:center; gap:10px; }
+    .logo{ width:22px; height:22px; border-radius:6px; background:linear-gradient(180deg,#000,#333); box-shadow: inset 0 0 0 1px var(--hairline); }
+    .brand h1{ font-size:14px; letter-spacing:.2px; margin:0; font-weight:600; }
+
+    nav{ display:flex; gap:18px; align-items:center; }
+    nav a{ color:var(--ink); opacity:.9; font-size:14px; }
+    nav a:hover{ opacity:1; text-decoration:none; }
+
+    .tgl{ appearance:none; border:1px solid var(--btn-outline); background:transparent; color:var(--ink); padding:6px 10px; border-radius:999px; cursor:pointer; font-size:13px; }
+    .tgl:focus-visible{ outline:none; box-shadow: var(--focus); }
+
+    /* Hero */
+    .hero{ padding: 56px 0 30px; }
+    .lead{ font-size: 14px; letter-spacing:.3px; color:var(--muted); }
+    .title{ font-size: clamp(34px, 5vw, 56px); line-height:1.05; margin: 8px 0 12px; font-weight:700; letter-spacing:-0.02em; }
+    .subtitle{ font-size: 18px; color:var(--muted); max-width: 720px; }
+    .cta{ display:flex; gap:12px; margin-top: 18px; flex-wrap:wrap; }
+
+    .btn{ display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:999px; border:1px solid var(--btn-outline); background:transparent; color:var(--ink); font-weight:600; }
+    .btn:hover{ background:var(--surface); }
+    .btn:focus-visible{ outline:none; box-shadow: var(--focus); }
+    .btn.primary{ background: var(--btn-bg); color: var(--btn-fg); border-color: transparent; }
+    .btn.primary:hover{ background: var(--btn-hover); }
+
+    /* Grid & cards */
+    .deck{ display:grid; grid-template-columns: repeat(12,1fr); gap: 16px; margin: 20px 0; }
+    .card{ grid-column: span 12; background: var(--card); border:1px solid var(--border); border-radius: 20px; padding: 18px 18px; box-shadow: none; transition: transform .25s cubic-bezier(.4,.2,.2,1), box-shadow .25s; }
+    .card:hover{ transform: translateY(-4px); box-shadow: var(--shadow); }
+    @media(min-width:760px){ .card.half{grid-column:span 6} .card.third{grid-column:span 4} }
+    .card h3{ margin: 4px 0 12px; font-size: 20px; letter-spacing:-.01em; }
+
+    .meta{ display:flex; gap:8px; flex-wrap:wrap; margin-top: 12px; }
+    .tag{ font-size:12px; padding: 6px 10px; border-radius: 999px; background: var(--surface); border:1px solid var(--hairline); color: var(--muted); }
+
+    /* Featured section */
+    .featured-inner{ display:grid; grid-template-columns: 1fr; gap:20px; align-items:center; }
+    .featured h4{ font-size: clamp(24px, 3.6vw, 36px); margin:0 0 8px; }
+    .featured p{ color: var(--muted); margin: 0 0 14px; max-width: 56ch; }
+    .featured-visual img{ width:100%; height:auto; border-radius:14px; border:1px solid var(--hairline); background:var(--surface); }
+    @media(min-width:900px){ .featured-inner{ grid-template-columns: 1.05fr .95fr; } }
+
+    /* Logo row */
+    .logo-row{ display:flex; gap:28px; align-items:center; flex-wrap:wrap; }
+    .logo-row img{ height:28px; filter: grayscale(100%); opacity:.7; transition: filter .3s, opacity .3s; }
+    .logo-row img:hover{ filter:none; opacity:1; }
+
+    /* Project tiles */
+    .tiles{ display:grid; grid-template-columns:1fr; gap:16px; }
+    @media(min-width:760px){ .tiles{ grid-template-columns: repeat(3,1fr); } }
+    .tile{ display:flex; flex-direction:column; gap:12px; border:1px solid var(--hairline); border-radius:18px; padding:14px; background:var(--card); }
+    .tile img{ width:100%; height:160px; object-fit:cover; border-radius:12px; border:1px solid var(--hairline); background:var(--surface); }
+    .tile h4{ margin:0; font-size:18px; }
+    .tile p{ margin:0; color:var(--muted); }
+
+    /* Panel */
+    .panel{ padding:20px; border:1px solid var(--hairline); border-radius: 16px; color: var(--muted); font-size:16px; background: var(--surface); }
+
+    /* Profile */
+    .profile .actions{ margin-top: 14px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+
+    /* Footer */
+    footer{ margin: 46px 0 60px; color: var(--muted); }
+    .foot{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; border-top:1px solid var(--hairline); padding-top:22px }
+
+    /* Reveal on scroll */
+    .reveal{ opacity:0; transform: translateY(10px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.is-visible{ opacity:1; transform:none; }
+
+    /* Accessibility & motion */
+    @media (prefers-reduced-motion: reduce){ *{ animation: none !important; transition: none !important } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap container" style="padding-inline: 0;">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <h1>Sveinn Margeir Hauksson</h1>
+      </div>
+      <nav>
+        <a href="index.html">Heim</a>
+        <a href="projects.html">Verkefni</a>
+        <a href="#cv">Ferilskrá</a>
+        <a href="https://www.linkedin.com/in/sveinn-hauksson/" target="_blank" rel="noopener">LinkedIn</a>
+        <button class="tgl" id="modeToggle" title="Toggle Light/Dark" aria-pressed="false">Breyta þema</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="site-title">
+      <div class="lead">Megindlegar greiningar • Fjármál • Áhætta</div>
+      <h2 id="site-title" class="title">Gagnvirkt verkefnasafn</h2>
+      <p class="subtitle">Úrvinnsla gagna, reiknilíkön og myndrænar framsetningar á fjölbreyttum verkefnum — með áherslu á íslenskan markað og áþreifanlega innsýn.</p>
+      <div class="cta">
+        <a class="btn primary" href="market_dashboard.html">Íslenski markaðurinn</a>
+        <a class="btn" href="projects.html">Skoða öll verkefni</a>
+      </div>
+    </section>
+
+    <!-- FEATURED PROJECT (big tile) -->
+    <section class="card featured reveal" aria-labelledby="featured-title">
+      <h3 id="featured-title">Verkefni í sviðsljósi</h3>
+      <div class="featured-inner">
+        <div class="featured-text">
+          <h4>Íslenski markaðurinn</h4>
+          <p>Rauntímagögn og áhættumælingar fyrir íslenska hlutabréfamarkaðinn. Sharpe, VaR, Expected Shortfall og fleira — framsett í hreinu og gagnvirku viðmóti.</p>
+          <a class="btn primary" href="market_dashboard.html">Skoða Dashboard →</a>
+        </div>
+        <div class="featured-visual">
+          <img src="assets/img/market_thumb.png" alt="Forskoðun á Íslenski markaðurinn dashboard" />
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECT TILES (3-up) -->
+    <section class="reveal" aria-labelledby="tiles-title">
+      <h3 id="tiles-title" style="margin-bottom:12px">Nýleg verkefni</h3>
+      <div class="tiles">
+        <a class="tile" href="anomaly.html">
+          <img src="assets/img/overnight.png" alt="Overnight anomaly thumbnail" />
+          <h4>Næturávöxtunarfrávik</h4>
+          <p>Hvenær myndast ávöxtun utan við opnunartíma og hvers vegna?</p>
+        </a>
+        <a class="tile" href="kickstarter_success.html">
+          <img src="assets/img/kickstarter.png" alt="Kickstarter thumbnail" />
+          <h4>Árangur Kickstarter-verkefna</h4>
+          <p>Hvaða þættir spá best fyrir um fjármögnun og afhendingu?</p>
+        </a>
+        <a class="tile" href="market_dashboard.html">
+          <img src="assets/img/risk.png" alt="Risk metrics thumbnail" />
+          <h4>Áhættutölur í rauntíma</h4>
+          <p>Sharpe, VaR og ES — uppfært með nýjustu gögnum.</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- INSTITUTIONS / LOGOS -->
+    <section class="card logos reveal" aria-labelledby="logos-title">
+      <h3 id="logos-title">Reynsla & Samstarf</h3>
+      <div class="logo-row" role="list">
+        <img role="listitem" src="assets/img/ucla.png" alt="UCLA" />
+        <img role="listitem" src="assets/img/icelandair.png" alt="Icelandair" />
+        <img role="listitem" src="assets/img/vikingur.png" alt="Víkingur Reykjavík" />
+      </div>
+    </section>
+
+    <!-- ABOUT / CONTACT -->
+    <section class="deck reveal" style="margin-top:8px">
+      <article class="card profile">
+        <h3>Um mig</h3>
+        <p>
+          Fjárhagsverkfræði, gögn og hönnun. Ég byggi gagnvirk tól sem gera flókin hugtök aðgerðarhæf — hvort sem það er áhættugreining á markaði, sjálfvirkar skýrslur eða líkanagerð fyrir ákvarðanatöku.
+        </p>
+        <div class="meta">
+          <span class="tag">UCLA MFE</span>
+          <span class="tag">Reykjavík ↔ Los Angeles</span>
+          <span class="tag">Fótbolti & Golf</span>
+        </div>
+        <div class="actions">
+          <a class="btn" href="mailto:sveinn.hauksson.2025@anderson.ucla.edu">Senda póst</a>
+          <a class="btn" href="https://www.linkedin.com/in/sveinn-hauksson/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </article>
+    </section>
+
+    <!-- CALL TO ACTION -->
+    <section class="panel reveal" aria-labelledby="cta-title">
+      <h3 id="cta-title">Viltu vinna með mér?</h3>
+      <p>Ég blanda saman fjármálaverkfræði, gögn og hönnun til að skapa innsýn í fjárhagslegar ákvarðanir.</p>
+      <div class="actions">
+        <a class="btn primary" href="mailto:sveinn.hauksson.2025@anderson.ucla.edu">Hafðu samband</a>
+        <a class="btn" href="projects.html">Skoða öll verkefni</a>
+      </div>
+    </section>
+
+    <footer>
+      <div class="foot">
+        <div>© <span id="yr"></span> Sveinn Margeir Hauksson</div>
+        <div id="viewStats">Views (this browser): <strong>—</strong></div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // --- Theme toggle with localStorage ---
+    const root = document.documentElement;
+    const saved = localStorage.getItem('theme');
+    if(saved === 'light'){ root.classList.add('forced'); root.classList.remove('dark'); }
+    if(saved === 'dark'){ root.classList.add('forced','dark'); }
+
+    document.getElementById('modeToggle').addEventListener('click', e =>{
+      const isDark = root.classList.toggle('dark');
+      root.classList.add('forced');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      e.currentTarget.setAttribute('aria-pressed', String(isDark));
+    });
+
+    // --- Footer year ---
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // --- Per-browser view counter (client-side only) ---
+    const k='smh_views';
+    const v=parseInt(localStorage.getItem(k)||'0',10)+1;
+    localStorage.setItem(k,String(v));
+    document.querySelector('#viewStats strong').textContent=v.toLocaleString();
+
+    // --- Reveal on scroll ---
+    const io = new IntersectionObserver((entries)=>{
+      for(const ent of entries){ if(ent.isIntersecting){ ent.target.classList.add('is-visible'); io.unobserve(ent.target); } }
+    }, { threshold: .12 });
+    document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
+  </script>
+</body>
+</html>
