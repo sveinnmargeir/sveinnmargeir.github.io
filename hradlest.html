@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="is">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hraðlest Dalvík–Akureyri • Sveinn Margeir Hauksson</title>
+  <meta name="description" content="Tillaga að hraðlestarleið frá Dalvík til Akureyrar og hönnun lestarvagns. Skýrsla og kynning." />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#0b0d12" />
+  <link rel="icon" href="assets/img/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root { --bg:#0b0d12; --card:#121620; --muted:#c8d0e0; --accent:#58a6ff; --txt:#e6ecf5; --border:#202638; --ring:var(--border); --shadow:0 10px 30px rgba(0,0,0,.35); }
+    :root.light { --bg:#f6f8fb; --card:#ffffff; --muted:#5b6470; --accent:#145cff; --txt:#0c1020; --border:#e8edf5; --ring:#e8edf5; --shadow:0 10px 25px rgba(10,40,120,.10); }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--txt)}
+    a{color:var(--accent);text-decoration:none}
+    .container{max-width:1050px;margin:0 auto;padding:24px}
+
+    header{position:sticky;top:0;backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--ring);z-index:40}
+    header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 28px;background:color-mix(in oklab, var(--bg) 85%, transparent)}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#6ee7ff);box-shadow:var(--shadow)}
+    nav{display:flex;gap:16px;align-items:center}
+    button.tgl{appearance:none;border:1px solid var(--ring);background:var(--card);color:var(--txt);padding:8px 12px;border-radius:12px;cursor:pointer}
+
+    .hero{display:grid;gap:12px;padding:28px 0 6px}
+    .eyebrow{color:var(--muted);font-size:13px;letter-spacing:.18em;text-transform:uppercase}
+    h1{font-size:32px;line-height:1.15;margin:0}
+    .sub{color:var(--muted);max-width:75ch}
+
+    .stack{display:grid;gap:16px;margin-top:12px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
+    .card h2,.card h3{margin:0 0 8px}
+    .card p{margin:0 0 8px;color:var(--muted)}
+    .pill{display:inline-block;font-size:12px;color:var(--muted);border:1px dashed var(--border);padding:4px 8px;border-radius:999px}
+    .meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:#0f1320;color:var(--txt)}
+    .btn:hover{background:#131a2b}
+    .btn.primary{background:linear-gradient(135deg,var(--accent),#6ee7ff);border-color:transparent;color:#001022;font-weight:600}
+    .btn.pill{border-radius:999px}
+
+    /* KPI */
+    .kpi{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    @media (min-width:640px){ .kpi{grid-template-columns:repeat(4,1fr)} }
+    .k{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:12px}
+    .k .v{font-weight:700;font-size:18px}
+    .k .l{font-size:12px;color:var(--muted)}
+
+    /* PDF tabs */
+    .tabs{display:flex;gap:8px;flex-wrap:wrap}
+    .tab{appearance:none;border:1px solid var(--border);background:#0f1320;color:var(--txt);padding:8px 12px;border-radius:10px;cursor:pointer}
+    .tab[aria-selected="true"]{background:linear-gradient(135deg,var(--accent),#6ee7ff);color:#001022;border-color:transparent;font-weight:600}
+    .pdf-wrap{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card);margin-top:12px}
+    .pdf-frame{width:100%;height:85vh;display:block}
+
+    footer{border-top:1px solid var(--border);color:var(--muted);padding:20px 0;margin-top:34px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <h1>Sveinn Margeir Hauksson • Quant work</h1>
+      </div>
+      <nav>
+        <a href="index.html">Heim</a>
+        <a href="projects.html">Verkefni</a>
+        <a href="market_dashboard.html">Markaðsmælaborð</a>
+        <a href="https://www.linkedin.com/in/sveinn-hauksson/" target="_blank" rel="noopener">LinkedIn</a>
+        <button class="tgl" id="modeToggle" title="Toggle Light/Dark">Breyta þema</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HERO -->
+    <section class="hero">
+      <span class="eyebrow">Verkefni — Samgöngur & hönnun</span>
+      <h1>Hraðlest frá Dalvík til Akureyrar + hönnun lestarvagns</h1>
+      <p class="sub">
+        Verkefnið leggur til hraðfærasta raunhæfa leið milli Dalvíkur og Akureyrar með áherslu á öryggi,
+        jarðtækni og byggðatengingu — ásamt hagnýtri hönnun á farþegalestarvagni með þægindi og öryggi í forgrunni.
+        Nánar í skýrslunum hér að neðan. :contentReference[oaicite:0]{index=0} :contentReference[oaicite:1]{index=1}
+      </p>
+      <div class="meta">
+        <span class="pill">HÍ • VEL201G</span>
+        <span class="pill">Hraðlest</span>
+        <span class="pill">Hönnun lestarvagns</span>
+        <span class="pill">Öryggi & aðgengi</span>
+      </div>
+      <div class="actions">
+        <a class="btn" href="assets/pdfs/hradlest.pdf" target="_blank" rel="noopener">Opna hraðlestarskýrslu</a>
+        <a class="btn" href="assets/pdfs/honnun_lestarvagn.pdf" target="_blank" rel="noopener">Opna hönnun lestarvagns</a>
+        <a class="btn pill" href="projects.html">Aftur í verkefni</a>
+      </div>
+    </section>
+
+    <!-- CONTENT -->
+    <section class="stack">
+      <article class="card">
+        <h2>Lykiltölur / Atriði</h2>
+        <div class="kpi">
+          <div class="k"><div class="v">45,5 km</div><div class="l">Áætluð heildarleið</div></div>
+          <div class="k"><div class="v">3 brýr</div><div class="l">Helstu mannvirki</div></div>
+          <div class="k"><div class="v">Jarðgöng</div><div class="l">Inn í Akureyri</div></div>
+          <div class="k"><div class="v">GFRP + ál</div><div class="l">Efnisval í vagn</div></div>
+        </div>
+        <p style="margin-top:6px">
+          Leiðarval, öryggisgreining (snjó- og skriðuhætta), kostnaðaráætlun og stöðvarhönnun ásamt
+          stílhreinni vagnahönnun með hjólastólaaðgengi, öruggum yfirhillum og notendavænum innréttingum. :contentReference[oaicite:2]{index=2} :contentReference[oaicite:3]{index=3}
+        </p>
+      </article>
+
+      <!-- Two-PDF TABBED VIEWER -->
+      <article class="card" id="viewer">
+        <h2>Skjalafyrirsýn</h2>
+        <p class="sub">Skiptu á milli hraðlestarskýrslu og lestarvagnshönnunar án þess að yfirgefa síðuna.</p>
+
+        <div class="tabs" role="tablist" aria-label="Veldu skjal">
+          <button class="tab" role="tab" id="tab-rail"   aria-selected="true"  aria-controls="panel-rail">Hraðlest (skýrsla)</button>
+          <button class="tab" role="tab" id="tab-wagon"  aria-selected="false" aria-controls="panel-wagon">Lestarvagn (hönnun)</button>
+        </div>
+
+        <div class="pdf-wrap" id="panel-rail"  role="tabpanel" aria-labelledby="tab-rail">
+          <iframe class="pdf-frame" src="assets/pdfs/hradlest.pdf#view=FitH&toolbar=1" title="Hraðlest Dalvík–Akureyri PDF"></iframe>
+        </div>
+        <div class="pdf-wrap" id="panel-wagon" role="tabpanel" aria-labelledby="tab-wagon" hidden>
+          <iframe class="pdf-frame" src="assets/pdfs/honnun_lestarvagn.pdf#view=FitH&toolbar=1" title="Hönnun lestarvagns PDF"></iframe>
+        </div>
+
+        <div class="actions">
+          <a class="btn" href="assets/pdfs/hradlest.pdf" target="_blank" rel="noopener">Opna hraðlestarskýrslu</a>
+          <a class="btn" href="assets/pdfs/honnun_lestarvagn.pdf" target="_blank" rel="noopener">Opna hönnun vagns</a>
+          <a class="btn pill" href="assets/pdfs/hradlest.pdf" download>Hlaða niður (hraðlest)</a>
+          <a class="btn pill" href="assets/pdfs/honnun_lestarvagn.pdf" download>Hlaða niður (vagn)</a>
+        </div>
+
+        <p style="margin-top:8px;color:var(--muted);font-size:14px;">
+          Ef forskoðun ræsist ekki á tækinu: opnaðu hlekkina hér að ofan.
+        </p>
+      </article>
+
+      <article class="card">
+        <h2>Samantekt</h2>
+        <ul>
+          <li><strong>Leiðarhönnun:</strong> Línulögð og hæðarhagkvæm leið með tengingu við byggðarkjarna; jarðgöng inn í Akureyri til að raska minna. :contentReference[oaicite:4]{index=4}</li>
+          <li><strong>Öryggi:</strong> Tillit til snjóflóða/krapaflóða og aurskriðna; lækkun niður að Hörgá fyrir Möðruvöllum. :contentReference[oaicite:5]{index=5}</li>
+          <li><strong>Kostnaður:</strong> Áætlanir byggðar á einingaverðum fyrir teina, brýr og jarðgöng; myndræn sundurliðun í skýrslu. :contentReference[oaicite:6]{index=6}</li>
+          <li><strong>Lestarvagn:</strong> Stálgrind, álklæðning, GFRP innveggir, tvöfaldir gluggar, öruggar yfirhillur (PC), hjólastólaaðgengi og sveigjanlegt sætaskipan. :contentReference[oaicite:7]{index=7}</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">© <span id="year"></span> Sveinn Margeir Hauksson • Quant Projects</div>
+  </footer>
+
+  <script>
+    // Theme toggle (persist)
+    (function(){
+      const saved = localStorage.getItem('theme');
+      if(saved === 'light'){ document.documentElement.classList.add('light'); }
+      const btn = document.getElementById('modeToggle');
+      if(btn){
+        btn.addEventListener('click', ()=>{
+          const light = document.documentElement.classList.toggle('light');
+          localStorage.setItem('theme', light ? 'light' : 'dark');
+        });
+      }
+      document.getElementById('year').textContent = new Date().getFullYear();
+    })();
+
+    // Simple tabs
+    (function(){
+      const tabRail   = document.getElementById('tab-rail');
+      const tabWagon  = document.getElementById('tab-wagon');
+      const panelRail = document.getElementById('panel-rail');
+      const panelWag  = document.getElementById('panel-wagon');
+
+      function select(which){
+        const isRail = which === 'rail';
+        tabRail.setAttribute('aria-selected', isRail ? 'true':'false');
+        tabWagon.setAttribute('aria-selected', !isRail ? 'true':'false');
+        panelRail.hidden = !isRail;
+        panelWag.hidden  =  isRail;
+      }
+      tabRail.addEventListener('click', ()=>select('rail'));
+      tabWagon.addEventListener('click', ()=>select('wagon'));
+    })();
+  </script>
+</body>
+</html>
